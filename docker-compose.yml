@@ -1,0 +1,26 @@
+version: "3.7"
+services:
+  phpfpm:
+      extra_hosts:
+         - host.docker.internal:host-gateway
+      # user: root
+      build: ./docker/configs/phpfpm
+      restart: always
+      container_name: "php81_${APP_NAME}"
+      image: phpfpm:8.1
+      ports:
+        - 9000:9000
+      volumes:
+        - ".:/var/www/html/geomixer2"
+  mariadb:
+    container_name: "mariadb_${APP_NAME}"
+    image: mariadb:latest
+    restart: always
+    volumes:
+      - "./docker/volumes/mariadb:/var/lib/mysql/"
+#      - "/var/run/mysqld/mysqld.sock:/var/run/mysqld/mysqld.sock"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USERNAME}
+      - MYSQL_DATABASE=${DB_DATABASE}
