@@ -7,10 +7,14 @@
     "require": {
         "php": "^8.0.2",
         "guzzlehttp/guzzle": "^7.2",
+        "kongulov/nova-tab-translatable": "^2.0",
         "laravel/framework": "^9.19",
+        "laravel/nova": "~4.0",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
-        "laravel/nova": "~4.0"
+        "league/flysystem-aws-s3-v3": "^3.10",
+        "spatie/db-dumper": "^3.3",
+        "spatie/laravel-translatable": "^6.1"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
