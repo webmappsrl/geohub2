@@ -1,6 +1,5 @@
 FROM php:8.1-fpm
 
-
 USER root
 
 ADD .bashrc /var/www/.bashrc
@@ -26,11 +25,11 @@ RUN chown -R www-data:www-data /var/www \
         libmagickwand-dev \
         libmagickcore-dev \
         git \
-	unzip \
+	    unzip \
         vim \
         libzip-dev \
-	mariadb-client \
-	libwebp-dev
+	    libwebp-dev \
+        libpq-dev 
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-configure intl \
     && docker-php-ext-install -j$(nproc) \
@@ -38,11 +37,13 @@ RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-w
 	intl \
 	zip \
    	pdo \
-    	pdo_mysql \
-    	opcache \
-#   && pecl install xdebug \
+    pdo_mysql \
+    opcache \
+    pgsql \
+    pdo_pgsql \
+    # && pecl install xdebug \
     && pecl install imagick \
-#   && docker-php-ext-enable xdebug \
+    # && docker-php-ext-enable xdebug \
     && pecl install apcu \
     #&& pecl install mcrypt-1.0.2 \
     #&& docker-php-ext-enable mcrypt \
