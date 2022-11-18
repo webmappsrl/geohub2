@@ -9,9 +9,11 @@ services:
       container_name: "php81_${APP_NAME}"
       image: phpfpm:8.1
       ports:
-        - 9001:9000
+        - ${DOCKER_PHP_PORT}:9000
+        - ${DOCKER_SERVE_PORT}:8000
       volumes:
-        - ".:/var/www/html/geomixer2"
+        - ".:/var/www/html/${DOCKER_PROJECT_DIR_NAME}"
+      working_dir: '/var/www/html/${DOCKER_PROJECT_DIR_NAME}'
   mariadb:
     container_name: "mariadb_${APP_NAME}"
     image: mariadb:latest
