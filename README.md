@@ -18,14 +18,6 @@ Webmapp's Starting point
   git remote add origin git@github.com:username/repo.git
   ```
 
-- Creare l'ambiente docker
-  ```sh
-  cd docker
-  bash init-docker.sh
-  ```
-- Digitare `y` durante l'esecuzione dello script per l'installazione di xdebug
-
-##### Cosa fa `init-docker.sh`
 - Copy file `.env-example` to `.env`
 
   Questi valori nel file .env sono necessari per avviare l'ambiente docker. Hanno un valore di default e delle convenzioni associate, valutare la modifica:
@@ -38,8 +30,26 @@ Webmapp's Starting point
   - `DB_USERNAME`
   - `DB_PASSWORD`
 
-- Installa xdebug dentro al container php se l'utente lo desidera
+- Creare l'ambiente docker
+  ```sh
+  cd docker
+  bash init-docker.sh
+  ```
+- Digitare `y` durante l'esecuzione dello script per l'installazione di xdebug
 
-- Lancia in modo detached tutti i container necessari all'avvio dell'applicazione
+- Verificare che i container si siano avviati
+  ```sh
+  docker ps
+  ```
 
-### Script disponibili
+- Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve
+  ```sh
+  docker exec -it php81_$nomeApp bash
+  composer install
+  php artisan serve --host 0.0.0.0
+  ```
+
+- A questo punto l'applicativo è in ascolto su <http://127.0.0.1:8000>
+
+
+
