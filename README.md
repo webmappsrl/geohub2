@@ -42,7 +42,7 @@ Webmapp's Starting point
   docker ps
   ```
 
-- Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve
+- Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve (utilizzare `APP_NAME` al posto di `$nomeApp`):
   ```sh
   docker exec -it php81_$nomeApp bash
   composer install
@@ -55,11 +55,20 @@ Webmapp's Starting point
 
 ### Scripts
 
-Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg:
+Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `$nomeApp`):
 
 ```bash
 docker exec -it php81_$nomeApp bash scripts/deploy_dev.sh
 ```
+
+### Artisan commands
+
+- `db:dump_db`
+  Create a new sql file exporting all the current database in the local disk under the `database` directory
+- `db:download`
+  download a dump.sql from server
+- `db:restore`
+  Restore a last-dump.sql file (must be in root dir)
 
 ### Problemi noti
 
@@ -70,7 +79,7 @@ Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura s
     chown -R 33 storage
   ```
 
-- Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root:
+- Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
   ```bash
   docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
   ```

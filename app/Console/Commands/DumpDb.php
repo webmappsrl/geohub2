@@ -15,7 +15,7 @@ class DumpDb extends Command {
      *
      * @var string
      */
-    protected $signature = 'wp:dump_db';
+    protected $signature = 'db:dump_db';
     /**
      * The console command description.
      *
