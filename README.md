@@ -53,3 +53,25 @@ Webmapp's Starting point
 
 
 
+### Scripts
+
+Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg:
+
+```bash
+docker exec -it php81_$nomeApp bash scripts/deploy_dev.sh
+```
+
+### Problemi noti
+
+Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura su certe cartelle, questo perchè di default l'utente dentro il container è `www-data (id:33)` quando invece nel sistema host l'utente ha id `1000`. Ci sono 2 possibili soluzioni:
+
+- Chown/chmod della cartella dove si intende scrivere, eg:
+  ```bash
+    chown -R 33 storage
+  ```
+
+- Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root:
+  ```bash
+  docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
+  ```
+
