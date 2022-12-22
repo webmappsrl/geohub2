@@ -46,6 +46,9 @@ Webmapp's Starting point
   ```sh
   docker exec -it php81_$nomeApp bash
   composer install
+  php artisan key:generate
+  php artisan optimize
+  php artisan migrate
   php artisan serve --host 0.0.0.0
   ```
 
