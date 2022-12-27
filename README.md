@@ -55,6 +55,29 @@ Webmapp's Starting point
 
 -   A questo punto l'applicativo è in ascolto su <http://127.0.0.1:8000>
 
+### Configurazione xdebug
+
+Una volta avviato il container con xdebug configurare il file `.vscode/launch.json` con la path della cartella del progetto sul sistema host. Eg:
+
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Listen for Xdebug",
+            "type": "php",
+            "request": "launch",
+            "port": 9200,
+            "pathMappings": {
+                "/var/www/html/geomixer2": "${workspaceRoot}"
+            }
+        }
+    ]
+}
+```
+
+Aggiornare `/var/www/html/geomixer2` con la path della cartella sul proprio computer.
+
 ### Scripts
 
 Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `$nomeApp`):
