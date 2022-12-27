@@ -4,6 +4,15 @@ Webmapp's Starting point
 
 ## Laravel 9 Project based on Nova 4
 
+Boilerplate per Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
+
+### Differenze ambiente produzione locale
+
+Questo sistema di container docker è utilizzabile sia per lo sviluppo locale sia per un sistema in produzione. In locale abbiamo queste caratteristiche:
+
+-   la possibilità di lanciare il processo processo `php artisan serve` all'interno del container phpfpm, quindi la configurazione della porta `DOCKER_SERVE_PORT` (default: `8000`) necessaria al progetto. Se servono più istanze laravel con processo artisan serve contemporaneamente in locale, valutare di dedicare una porta tcp dedicata ad ognuno di essi. Per fare questo basta solo aggiornare `DOCKER_SERVE_PORT`.
+-   la presenza di xdebug, definito in fase di build dell'immagine durante l'esecuzione del comando
+
 ### Inizializzazione tramite boilerplate
 
 -   Download del codice del boilerplate in una nuova cartella `nuovoprogetto` e disattivare il collegamento tra locale/remote:
@@ -24,11 +33,19 @@ Webmapp's Starting point
 
     -   `APP_NAME` (it's php container name and - postgrest container name, no space)
     -   `DOCKER_PHP_PORT` (Incrementing starting from 9100 to 9199 range for MAC check with command "lsof -iTCP -sTCP:LISTEN")
-    -   `DOCKER_SERVE_PORT` (always 8000)
+    -   `DOCKER_SERVE_PORT` (always 8000, only on local environment)
     -   `DOCKER_PROJECT_DIR_NAME` (it's the folder name of the project)
     -   `DB_DATABASE`
     -   `DB_USERNAME`
     -   `DB_PASSWORD`
+
+    Se siamo in produzione, rimuovere (o commentare) la riga:
+
+    ```yml
+    - ${DOCKER_SERVE_PORT}:8000
+    ```
+
+    dal file `docker-compose.yml`
 
 -   Creare l'ambiente docker
     ```sh
@@ -53,11 +70,13 @@ Webmapp's Starting point
     php artisan serve --host 0.0.0.0
     ```
 
--   A questo punto l'applicativo è in ascolto su <http://127.0.0.1:8000>
+-   A questo punto l'applicativo è in ascolto su <http://127.0.0.1:8000> (la porta è quella definita in `DOCKER_SERVE_PORT`)
 
-### Configurazione xdebug
+### Configurazione xdebug vscode (solo in locale)
 
-Una volta avviato il container con xdebug configurare il file `.vscode/launch.json` con la path della cartella del progetto sul sistema host. Eg:
+Assicurarsi di aver installato l'estensione [PHP Debug](https://marketplace.visualstudio.com/items?itemName=xdebug.php-debug).
+
+Una volta avviato il container con xdebug configurare il file `.vscode/launch.json`, in particolare il `pathMappings` tenendo presente che **sulla sinistra abbiamo la path dove risiede il progetto all'interno del container**, `${workspaceRoot}` invece rappresenta la pah sul sistema host. Eg:
 
 ```json
 {
@@ -76,7 +95,19 @@ Una volta avviato il container con xdebug configurare il file `.vscode/launch.js
 }
 ```
 
-Aggiornare `/var/www/html/geomixer2` con la path della cartella sul proprio computer.
+Aggiornare `/var/www/html/geomixer2` con la path della cartella del progetto nel container phpfpm.
+
+Per utilizzare xdebug **su browser** utilizzare uno di questi 2 metodi:
+
+-   Installare estensione xdebug per browser [Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc)
+-   Utilizzare il query param `XDEBUG_SESSION_START=1` nella url che si vuole debuggare
+-   Altro, [vedi documentazione xdebug](https://xdebug.org/docs/step_debug#web-application)
+
+Invece **su cli** digitare questo prima di invocare il comando php da debuggare:
+
+```bash
+export XDEBUG_SESSION=1
+```
 
 ### Scripts
 
@@ -106,6 +137,10 @@ Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura s
     ```
 
 -   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
-    ```bash
-    docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
-    ```
+    `bash
+docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
+`
+
+Xdebug potrebbe non trovare il file di log configurato nel .ini, quindi generare vari warnings
+
+-   creare un file in `/var/log/xdebug.log` all'interno del container phpfpm. Eseguire un `chown www-data /var/log/xdebug.log`. Creare questo file solo se si ha esigenze di debug errori xdebug (impossibile analizzare il codice tramite breakpoint) visto che potrebbe crescere esponenzialmente nel tempo
