@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ccd83f4551845b62c51c6b13d2391379",
+    "content-hash": "9e846b374658abec3a5ccad02eeee921",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6894,16 +6894,10 @@
         {
             "name": "wm/wm-package",
             "version": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webmappsrl/wm-package.git",
-                "reference": "eb148a7ac7978df261c41d739a4281d54a53b561"
-            },
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webmappsrl/wm-package/zipball/eb148a7ac7978df261c41d739a4281d54a53b561",
-                "reference": "eb148a7ac7978df261c41d739a4281d54a53b561",
-                "shasum": ""
+                "type": "path",
+                "url": "../wm-package",
+                "reference": "3c1b4d240f83811b35bfca63c66c0090a8416010"
             },
             "require": {
                 "illuminate/contracts": "^9.0",
@@ -6922,7 +6916,6 @@
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpunit/phpunit": "^9.5"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "laravel": {
@@ -6940,7 +6933,28 @@
                     "Wm\\WmPackage\\Database\\Factories\\": "database/factories"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Wm\\WmPackage\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@php ./vendor/bin/testbench package:discover --ansi"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -6958,11 +6972,9 @@
                 "wm",
                 "wm-package"
             ],
-            "support": {
-                "issues": "https://github.com/webmappsrl/wm-package/issues",
-                "source": "https://github.com/webmappsrl/wm-package/tree/main"
-            },
-            "time": "2022-12-28T11:47:06+00:00"
+            "transport-options": {
+                "relative": true
+            }
         }
     ],
     "packages-dev": [
