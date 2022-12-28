@@ -2,9 +2,13 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
+        "wm/wm-package": "*",
         "php": "^8.0.2",
         "guzzlehttp/guzzle": "^7.2",
         "kongulov/nova-tab-translatable": "^2.0",
@@ -73,5 +77,4 @@
             "url": "https://nova.laravel.com"
         }
     ]
-
 }
