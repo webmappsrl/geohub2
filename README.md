@@ -146,19 +146,3 @@ docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
 Xdebug potrebbe non trovare il file di log configurato nel .ini, quindi generare vari warnings
 
 -   creare un file in `/var/log/xdebug.log` all'interno del container phpfpm. Eseguire un `chown www-data /var/log/xdebug.log`. Creare questo file solo se si ha esigenze di debug errori xdebug (impossibile analizzare il codice tramite breakpoint) visto che potrebbe crescere esponenzialmente nel tempo
-
-### Default private/public routes (powered by [Sanctum](https://laravel.com/docs/9.x/sanctum) )
-
--   public routes
-    -   `POST /login` :
-        consente la login tramite parametri `email` e `password` in formato `x-www-form-urlencoded`
--   private routes
-    -   `POST /logout`
-        consente la logout tramite Bearer token
-    -   `GET /user`
-        restituisce i dettagli dell'utente loggato tramite Bearer token
-    -   `POST /register`
-        registra gli utenti fornendo `name`,`email` e `password`. L'accesso a questa api è consentito solo tramite Bearer token con ability `create-users`. Per registrare un nuovo token legato all'utente con `id = 1` utilizzare `php artisan tinker`:
-        ```php
-        \App\User\find(1)->createToken('artisan-token', ['create-users'])->plainTextToken
-        ```
