@@ -25,7 +25,7 @@ class StoreApiTest extends TestCase
       'geometry' => json_encode(['type' => 'Point', 'coordinates' => [1, 2]])
     ];
 
-    $url = env('HOQU_URL');
+    $url = config('wm-package.hoqu_url');
 
     Http::fake([
       $url . '*' => Http::sequence()->pushStatus(200)
