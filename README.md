@@ -1,10 +1,10 @@
-# Laravel Postgis Boilerplate
+# Geohub 2
 
 Webmapp's Starting point
 
-## Laravel 9 Project based on Nova 4
+## Geohub2 based on Nova 4
 
-Boilerplate per Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
+Geohub2 in Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
 
 ### Differenze ambiente produzione locale
 
@@ -15,25 +15,12 @@ Questo sistema di container docker è utilizzabile sia per lo sviluppo locale si
 -   `APP_ENV=local`, `APP_DEBUG=true` e `LOG_LEVEL=debug` che istruiscono laravel su una serie di comportamenti per il debug e l'esecuzione locale dell'applicativo
 -   Una password del db con complessità minore. **In produzione usare [password complesse](https://www.avast.com/random-password-generator#pc)**
 
-### Inizializzazione tramite boilerplate
-
--   Download del codice del boilerplate in una nuova cartella `nuovoprogetto` e disattivare il collegamento tra locale/remote:
-    ```sh
-    git clone https://github.com/webmappsrl/laravel-postgis-boilerplate.git nuovoprogetto
-    cd nuovoprogetto
-    git remote remove origin
-    ```
--   Effettuare il link tra la repository locale e quella remota (repository vuota github)
-
-    ```sh
-    git remote add origin git@github.com:username/repo.git
-    ```
+### Inizializzazione
 
 -   Copy file `.env-example` to `.env`
 
     Questi valori nel file .env sono necessari per avviare l'ambiente docker. Hanno un valore di default e delle convenzioni associate, valutare la modifica:
 
-    -   `APP_NAME` (it's php container name and - postgrest container name, no space)
     -   `DOCKER_PHP_PORT` (Incrementing starting from 9100 to 9199 range for MAC check with command "lsof -iTCP -sTCP:LISTEN")
     -   `DOCKER_SERVE_PORT` (always 8000, only on local environment)
     -   `DOCKER_PROJECT_DIR_NAME` (it's the folder name of the project)
@@ -61,10 +48,10 @@ Questo sistema di container docker è utilizzabile sia per lo sviluppo locale si
     docker ps
     ```
 
--   Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve (utilizzare `APP_NAME` al posto di `$nomeApp`):
+-   Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve:
 
     ```sh
-    docker exec -it php81_$nomeApp bash
+    docker exec -it php81_geohub2 bash
     composer install
     php artisan key:generate
     php artisan optimize
@@ -90,14 +77,14 @@ Una volta avviato il container con xdebug configurare il file `.vscode/launch.js
             "request": "launch",
             "port": 9200,
             "pathMappings": {
-                "/var/www/html/geomixer2": "${workspaceRoot}"
+                "/var/www/html/geohub2": "${workspaceRoot}"
             }
         }
     ]
 }
 ```
 
-Aggiornare `/var/www/html/geomixer2` con la path della cartella del progetto nel container phpfpm.
+Aggiornare `/var/www/html/geohub2` con la path della cartella del progetto nel container phpfpm.
 
 Per utilizzare xdebug **su browser** utilizzare uno di questi 2 metodi:
 
@@ -113,10 +100,10 @@ export XDEBUG_SESSION=1
 
 ### Scripts
 
-Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `$nomeApp`):
+Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `geohub2`):
 
 ```bash
-docker exec -it php81_$nomeApp bash scripts/deploy_dev.sh
+docker exec -it php81_geohub2 bash scripts/deploy_dev.sh
 ```
 
 ### Artisan commands
@@ -138,9 +125,9 @@ Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura s
       chown -R 33 storage
     ```
 
--   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
+-   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `geohub2`):
     `bash
-docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
+docker exec -u 0 -it php81_geohub2 bash scripts/deploy_dev.sh
 `
 
 Xdebug potrebbe non trovare il file di log configurato nel .ini, quindi generare vari warnings
