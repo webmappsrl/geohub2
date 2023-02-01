@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dae4e45e77db00c5a0de91094bb9e51b",
+    "content-hash": "289a4edece5f0a3ba532adf7f97bad14",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -2393,20 +2393,20 @@
         },
         {
             "name": "league/flysystem-aws-s3-v3",
-            "version": "3.10.3",
+            "version": "3.12.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem-aws-s3-v3.git",
-                "reference": "f593bf91f94f2adf4f71513d29f1dfa693f2f640"
+                "reference": "645e14e4a80bd2da8b01e57388e7296a695a80c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/f593bf91f94f2adf4f71513d29f1dfa693f2f640",
-                "reference": "f593bf91f94f2adf4f71513d29f1dfa693f2f640",
+                "url": "https://api.github.com/repos/thephpleague/flysystem-aws-s3-v3/zipball/645e14e4a80bd2da8b01e57388e7296a695a80c2",
+                "reference": "645e14e4a80bd2da8b01e57388e7296a695a80c2",
                 "shasum": ""
             },
             "require": {
-                "aws/aws-sdk-php": "^3.132.4",
+                "aws/aws-sdk-php": "^3.220.0",
                 "league/flysystem": "^3.10.0",
                 "league/mime-type-detection": "^1.0.0",
                 "php": "^8.0.2"
@@ -2443,7 +2443,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/flysystem-aws-s3-v3/issues",
-                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.10.3"
+                "source": "https://github.com/thephpleague/flysystem-aws-s3-v3/tree/3.12.2"
             },
             "funding": [
                 {
@@ -2459,7 +2459,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-10-26T18:15:09+00:00"
+            "time": "2023-01-17T14:15:08+00:00"
         },
         {
             "name": "league/mime-type-detection",
@@ -4149,27 +4149,27 @@
         },
         {
             "name": "spatie/laravel-translatable",
-            "version": "6.2.0",
+            "version": "6.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-translatable.git",
-                "reference": "e001426def09342dd2723bf28c7a9313621f1d69"
+                "reference": "b3f6fa43ce05d7640ca9eacf4fee9c0037fc84d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-translatable/zipball/e001426def09342dd2723bf28c7a9313621f1d69",
-                "reference": "e001426def09342dd2723bf28c7a9313621f1d69",
+                "url": "https://api.github.com/repos/spatie/laravel-translatable/zipball/b3f6fa43ce05d7640ca9eacf4fee9c0037fc84d2",
+                "reference": "b3f6fa43ce05d7640ca9eacf4fee9c0037fc84d2",
                 "shasum": ""
             },
             "require": {
-                "illuminate/database": "^9.0",
-                "illuminate/support": "^9.0",
+                "illuminate/database": "^9.0|^10.0",
+                "illuminate/support": "^9.0|^10.0",
                 "php": "^8.0",
                 "spatie/laravel-package-tools": "^1.11"
             },
             "require-dev": {
                 "mockery/mockery": "^1.4",
-                "orchestra/testbench": "^7.0",
+                "orchestra/testbench": "^7.0|^8.0",
                 "pestphp/pest": "^1.20"
             },
             "type": "library",
@@ -4218,7 +4218,7 @@
                 "translate"
             ],
             "support": {
-                "source": "https://github.com/spatie/laravel-translatable/tree/6.2.0"
+                "source": "https://github.com/spatie/laravel-translatable/tree/6.3.0"
             },
             "funding": [
                 {
@@ -4226,7 +4226,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-12-23T10:18:49+00:00"
+            "time": "2023-01-14T20:57:45+00:00"
         },
         {
             "name": "spatie/once",
