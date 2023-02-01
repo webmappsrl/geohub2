@@ -18,7 +18,8 @@
         "league/flysystem-aws-s3-v3": "^3.12",
         "spatie/db-dumper": "^3.3",
         "spatie/laravel-translatable": "^6.3",
-        "wm/wm-package": "*"
+        "wm/wm-package": "*",
+        "wm/wm-internal": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -75,6 +76,10 @@
         {
             "type": "composer",
             "url": "https://nova.laravel.com"
+        },
+        {
+            "type": "path",
+            "url": "./wm-internal"
         }
     ]
 }
