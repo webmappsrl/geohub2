@@ -58,6 +58,9 @@ class User extends ModelUser
      */
     public function isEditor(): bool
     {
+        if ($this->is_admin) {
+            return false;
+        }
         return $this->is_editor;
     }
     /**
@@ -80,10 +83,10 @@ class User extends ModelUser
     public function getRole(): string
     {
         if ($this->is_admin) {
-            return 'Admin';
-        } elseif ($this->is_editor) {
-            return 'Editor';
+            return 'admin';
+        } elseif ($this->is_editor && !$this->is_admin) {
+            return 'editor';
         }
-        return 'Contributor';
+        return 'contributor';
     }
 }
