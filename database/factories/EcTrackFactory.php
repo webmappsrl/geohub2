@@ -20,7 +20,7 @@ class EcTrackFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
-            'geography' => $this->createLineString(),
+            'geometry' => $this->createLineString(),
             'geobox_areas' => $this->faker->json_encode(),
         ];
     }
@@ -31,6 +31,6 @@ class EcTrackFactory extends Factory
         $lat2 = $this->faker->randomFloat(2, 11, 13);
         $lng1 = $this->faker->randomFloat(2, 42, 45);
         $lng2 = $this->faker->randomFloat(2, 42, 45);
-        return "LINESTRING($lat1 $lng1 0, $lat2 $lng1 0, $lat2 $lng2 0, $lat1 $lng2 0)";
+        return "LINESTRING($lat1 $lng1, $lat2 $lng1, $lat2 $lng2, $lat1 $lng2)";
     }
 }

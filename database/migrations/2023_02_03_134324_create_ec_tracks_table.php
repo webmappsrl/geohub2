@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('ec_tracks', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name')->nullable(false);
-            $table->text('description');
-            $table->lineString('geography');
-            $table->json('geobox_areas');
+            $table->string('name');
+            $table->text('description')->nullable();
+            $table->lineString('geometry')->nullable();
+            $table->json('geobox_areas')->nullable();
         });
     }
 
