@@ -40,4 +40,50 @@ class User extends ModelUser
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * This method checks if the user is admin
+     *
+     * @return boolean
+     */
+    public function isAdmin(): bool
+    {
+        return $this->is_admin;
+    }
+
+    /**
+     * This method checks if the user is editor
+     *
+     * @return boolean
+     */
+    public function isEditor(): bool
+    {
+        return $this->is_editor;
+    }
+    /**
+     * This method checks if the user is contributor
+     *
+     * @return boolean
+     */
+    public function isContributor(): bool
+    {
+        if (!$this->is_editor && !$this->is_admin) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * This method returns the user role
+     *
+     * @return string
+     */
+    public function getRole(): string
+    {
+        if ($this->is_admin) {
+            return 'Admin';
+        } elseif ($this->is_editor) {
+            return 'Editor';
+        }
+        return 'Contributor';
+    }
 }
