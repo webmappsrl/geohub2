@@ -75,6 +75,7 @@ class User extends ModelUser
         }
         return false;
     }
+    
     /**
      * This method returns the user role
      *

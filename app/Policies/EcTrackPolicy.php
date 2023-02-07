@@ -18,7 +18,10 @@ class EcTrackPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->getRole(['editor', 'admin']);
+        if($user->isEditor() || $user->isAdmin()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -30,7 +33,10 @@ class EcTrackPolicy
      */
     public function view(User $user, EcTrack $ecTrack)
     {
-        return $user->getRole(['editor', 'admin']);
+        if($user->isEditor() || $user->isAdmin()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -41,7 +47,10 @@ class EcTrackPolicy
      */
     public function create(User $user)
     {
-        return $user->getRole(['editor', 'admin']);
+        if($user->isEditor() || $user->isAdmin()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -53,7 +62,10 @@ class EcTrackPolicy
      */
     public function update(User $user, EcTrack $ecTrack)
     {
-        return $user->getRole(['editor', 'admin']);
+        if($user->isEditor() || $user->isAdmin()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -65,7 +77,10 @@ class EcTrackPolicy
      */
     public function delete(User $user, EcTrack $ecTrack)
     {
-        //
+        if($user->isEditor() || $user->isAdmin()) {
+            return true;
+        }
+        return false;
     }
 
     /**
