@@ -18,7 +18,7 @@ class EcTrackPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->hasRole(['editor', 'admin']);
+        return $user->getRole(['editor', 'admin']);
     }
 
     /**
@@ -30,7 +30,7 @@ class EcTrackPolicy
      */
     public function view(User $user, EcTrack $ecTrack)
     {
-        return $user->hasRole(['editor', 'admin']);
+        return $user->getRole(['editor', 'admin']);
     }
 
     /**
@@ -41,7 +41,7 @@ class EcTrackPolicy
      */
     public function create(User $user)
     {
-        return $user->hasRole(['editor', 'admin']);
+        return $user->getRole(['editor', 'admin']);
     }
 
     /**
@@ -53,7 +53,7 @@ class EcTrackPolicy
      */
     public function update(User $user, EcTrack $ecTrack)
     {
-        return $user->hasRole(['editor', 'admin']);
+        return $user->getRole(['editor', 'admin']);
     }
 
     /**
