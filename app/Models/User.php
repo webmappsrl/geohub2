@@ -75,7 +75,7 @@ class User extends ModelUser
         }
         return false;
     }
-    
+
     /**
      * This method returns the user role
      *
@@ -89,5 +89,11 @@ class User extends ModelUser
             return 'editor';
         }
         return 'contributor';
+    }
+    // Relationship with  EcTracks
+
+    public function ecTracks()
+    {
+        return $this->hasMany(EcTrack::class);
     }
 }
