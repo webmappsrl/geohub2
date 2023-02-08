@@ -26,7 +26,7 @@ class EcPoiFactory extends Factory
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
             'geometry' => DB::raw("ST_GeomFromText('POINT($lat $lng)')"),
-            'geobox_areas' => $this->faker->json_encode(),
+            // 'geobox_areas' => $this->faker->json_encode(),
         ];
     }
 }
