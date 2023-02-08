@@ -7,14 +7,14 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class EcTrack extends Resource
+class EcPoi extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\EcTrack>
+     * @var class-string<\App\Models\EcPoi>
      */
-    public static $model = \App\Models\EcTrack::class;
+    public static $model = \App\Models\EcPoi::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
