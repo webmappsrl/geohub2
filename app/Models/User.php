@@ -6,6 +6,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Wm\WmPackage\Model\User as ModelUser;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Nova\Auth\Impersonatable;
+use Laravel\Sanctum\HasApiTokens;
+
+class User extends Authenticatable
+{
+    use HasApiTokens, HasFactory, Impersonatable, Notifiable;
+
+    // ...
+}
 
 class User extends ModelUser
 {
@@ -75,7 +85,7 @@ class User extends ModelUser
         }
         return false;
     }
-    
+
     /**
      * This method returns the user role
      *
