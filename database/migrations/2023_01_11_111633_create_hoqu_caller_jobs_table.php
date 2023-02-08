@@ -18,8 +18,9 @@ return new class extends Migration
             $table->timestamps();
             $table->integer('job_id');
             $table->string('class');
-            $table->integer('feature_id');
+            $table->morphs('feature');
             $table->string('field_to_update');
+            $table->string('status');
         });
     }
 
