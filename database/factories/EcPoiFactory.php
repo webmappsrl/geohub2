@@ -19,17 +19,14 @@ class EcPoiFactory extends Factory
     public function definition()
     {
 
-        $lat1 = $this->faker->randomFloat(2, 11, 13);
-        $lat2 = $this->faker->randomFloat(2, 11, 13);
-        $lng1 = $this->faker->randomFloat(2, 42, 45);
-        $lng2 = $this->faker->randomFloat(2, 42, 45);
+        $lat = $this->faker->latitude();
+        $lng = $this->faker->longitude();
 
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
-            'geometry' => DB::raw("(ST_GeomFromText('LINESTRING($lat1 $lng1, $lat2 $lng1, $lat2 $lng2, $lat1 $lng2)'))"),
+            'geometry' => DB::raw("ST_GeomFromText('POINT($lat $lng)')"),
             'geobox_areas' => $this->faker->json_encode(),
-
         ];
     }
 }

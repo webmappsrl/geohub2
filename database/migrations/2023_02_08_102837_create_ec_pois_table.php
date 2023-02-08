@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamps();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->lineString('geometry')->nullable();
+            $table->point('geometry')->nullable();
             $table->json('geobox_areas')->nullable();
         });
     }
