@@ -11,5 +11,13 @@ class EcTrack extends Model
 
     protected $fillable = [
         'name',
+        'user_id',
     ];
+
+    // Relationship with user
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
