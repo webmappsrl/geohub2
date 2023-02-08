@@ -93,6 +93,12 @@ class User extends ModelUser
         }
         return 'contributor';
     }
+    // Relationship with  EcTracks
+
+    public function ecTracks()
+    {
+        return $this->hasMany(EcTrack::class);
+    }
 
     public function canImpersonate()
     {
