@@ -12,7 +12,7 @@ use Wm\WmPackage\Model\User as ModelUser;
 
 class User extends ModelUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Impersonatable;
 
     /**
      * The attributes that are mass assignable.
