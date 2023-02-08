@@ -24,6 +24,7 @@ class EcTrack extends Model
     protected $fillable = [
         'name',
         'user_id',
+        'description'
     ];
 
     // Relationship with user
