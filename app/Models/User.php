@@ -5,11 +5,14 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Nova\Auth\Impersonatable;
 use Wm\WmPackage\Model\User as ModelUser;
+
+
 
 class User extends ModelUser
 {
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, Impersonatable;
 
     /**
      * The attributes that are mass assignable.
@@ -95,5 +98,16 @@ class User extends ModelUser
     public function ecTracks()
     {
         return $this->hasMany(EcTrack::class);
+    }
+
+    public function canImpersonate()
+    {
+        if ($this->isAdmin()) return true;
+        return false;
+    }
+    public function canBeImpersonated()
+    {
+        if (!$this->isAdmin()) return true;
+        return false;
     }
 }
