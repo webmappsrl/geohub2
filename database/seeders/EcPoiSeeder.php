@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\EcTrack;
+use App\Models\EcPoi;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class EcTrackSeeder extends Seeder
+class EcPoiSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,6 +15,6 @@ class EcTrackSeeder extends Seeder
      */
     public function run()
     {
-        EcTrack::factory()->count(100)->create();
+        EcPoi::factory()->count(100)->create();
     }
 }

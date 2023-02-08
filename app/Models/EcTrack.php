@@ -22,6 +22,7 @@ class EcTrack extends Model
     }
 
     protected $fillable = [
+        'name',
         'user_id',
     ];
 

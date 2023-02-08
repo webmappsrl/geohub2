@@ -4,18 +4,17 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
-class EcTrack extends Resource
+class EcPoi extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\EcTrack>
+     * @var class-string<\App\Models\EcPoi>
      */
-    public static $model = \App\Models\EcTrack::class;
+    public static $model = \App\Models\EcPoi::class;
 
     /**
      * The single value that should be used to represent the resource when being displayed.
@@ -34,21 +33,6 @@ class EcTrack extends Resource
     ];
 
     /**
-     * Build an "index" query for the given resource.
-     *
-     * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
-     * @return \Illuminate\Database\Eloquent\Builder
-     */
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        if ($request->user()->isAdmin()) {
-            return $query;
-        }
-        return $query->where('user_id', $request->user()->id);
-    }
-
-    /**
      * Get the fields displayed by the resource.
      *
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
@@ -59,7 +43,6 @@ class EcTrack extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Name')->sortable()->rules('required'),
-            BelongsTo::make('User'),
         ];
     }
 
