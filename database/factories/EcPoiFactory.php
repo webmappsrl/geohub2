@@ -17,7 +17,19 @@ class EcPoiFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->name(),
+            'description' => $this->faker->text(),
+            'geometry' => $this->createLineString(),
+            'geobox_areas' => $this->faker->json_encode(),
         ];
+    }
+
+    function createLineString(): string
+    {
+        $lat1 = $this->faker->randomFloat(2, 11, 13);
+        $lat2 = $this->faker->randomFloat(2, 11, 13);
+        $lng1 = $this->faker->randomFloat(2, 42, 45);
+        $lng2 = $this->faker->randomFloat(2, 42, 45);
+        return "LINESTRING($lat1 $lng1, $lat2 $lng1, $lat2 $lng2, $lat1 $lng2)";
     }
 }
