@@ -38,7 +38,7 @@ class UserSeeder extends Seeder
         // 10 contributor
         User::factory(100)->create(['password'=>bcrypt('webmapp')]);
         // 10 editor
-        User::factory(100)->create(['is_editor'=>true,'password'=>bcrypt('webmapp')]);
+        User::factory(10)->create(['is_editor'=>true,'password'=>bcrypt('webmapp')]);
 
     }
 }
