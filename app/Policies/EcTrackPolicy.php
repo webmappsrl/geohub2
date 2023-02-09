@@ -18,7 +18,7 @@ class EcTrackPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->is_admin == true || $user->is_editor == true) {
+        if ($user->isAdmin() == true || $user->isEditor() == true) {
             return true;
         }
         return false;
@@ -33,9 +33,9 @@ class EcTrackPolicy
      */
     public function view(User $user, EcTrack $ecTrack)
     {
-        if ($user->is_admin == true) {
+        if ($user->isAdmin() == true) {
             return true;
-        } elseif ($user->is_editor == true  && $user->id === $ecTrack->user_id) {
+        } elseif ($user->isEditor() == true  && $user->id === $ecTrack->user_id) {
             return true;
         }
         return false;
@@ -49,7 +49,7 @@ class EcTrackPolicy
      */
     public function create(User $user)
     {
-        return $user->is_editor;
+        return $user->isEditor();
     }
 
     /**
@@ -61,9 +61,9 @@ class EcTrackPolicy
      */
     public function update(User $user, EcTrack $ecTrack)
     {
-        if ($user->is_admin == true) {
+        if ($user->isAdmin() == true) {
             return true;
-        } elseif ($user->is_editor == true && $user->id === $ecTrack->user_id) {
+        } elseif ($user->isEditor() == true && $user->id === $ecTrack->user_id) {
             return true;
         }
         return false;
@@ -78,9 +78,9 @@ class EcTrackPolicy
      */
     public function delete(User $user, EcTrack $ecTrack)
     {
-        if ($user->is_admin == true) {
+        if ($user->isAdmin() == true) {
             return true;
-        } elseif ($user->is_editor == true && $user->id === $ecTrack->user_id) {
+        } elseif ($user->isEditor() == true && $user->id === $ecTrack->user_id) {
             return true;
         }
         return false;
