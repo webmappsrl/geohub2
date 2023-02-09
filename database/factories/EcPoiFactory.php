@@ -3,8 +3,9 @@
 namespace Database\Factories;
 
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\EcPoi>
@@ -19,14 +20,19 @@ class EcPoiFactory extends Factory
     public function definition()
     {
 
+        // Creates some editors
+        if (User::where('is_editor', true)->count() == 0) {
+            User::factory(10)->create(['is_editor' => true]);
+        }
+
         $lat = $this->faker->randomFloat(6, 10.331693, 10.665219);
         $lng = $this->faker->randomFloat(6, 43.6516, 43.873329);
-
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
             'geometry' => DB::raw("ST_GeomFromText('POINT($lat $lng)')"),
             // 'geobox_areas' => $this->faker->json_encode(),
+            'user_id' => User::where('is_editor', true)->inRandomOrder()->first()->id,
         ];
     }
 }

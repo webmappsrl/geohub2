@@ -18,7 +18,7 @@ class EcPoiPolicy
      */
     public function viewAny(User $user)
     {
-        if ($user->isAdmin() || $user->isEditor()) {
+        if ($user->is_admin == true || $user->is_editor == true) {
             return true;
         }
         return false;
@@ -33,7 +33,9 @@ class EcPoiPolicy
      */
     public function view(User $user, EcPoi $ecPoi)
     {
-        if ($user->isAdmin() || $user->isEditor()) {
+        if ($user->is_admin == true) {
+            return true;
+        } elseif ($user->is_editor == true  && $user->id === $ecPoi->user_id) {
             return true;
         }
         return false;
@@ -47,10 +49,7 @@ class EcPoiPolicy
      */
     public function create(User $user)
     {
-        if ($user->isAdmin() || $user->isEditor()) {
-            return true;
-        }
-        return false;
+        return $user->is_editor;
     }
 
     /**
@@ -62,7 +61,9 @@ class EcPoiPolicy
      */
     public function update(User $user, EcPoi $ecPoi)
     {
-        if ($user->isAdmin() || $user->isEditor()) {
+        if ($user->is_admin == true) {
+            return true;
+        } elseif ($user->is_editor == true && $user->id === $ecPoi->user_id) {
             return true;
         }
         return false;
@@ -77,7 +78,9 @@ class EcPoiPolicy
      */
     public function delete(User $user, EcPoi $ecPoi)
     {
-        if ($user->isAdmin() || $user->isEditor()) {
+        if ($user->is_admin == true) {
+            return true;
+        } elseif ($user->is_editor == true && $user->id === $ecPoi->user_id) {
             return true;
         }
         return false;

@@ -100,6 +100,15 @@ class User extends ModelUser
         return $this->hasMany(EcTrack::class);
     }
 
+    // Relationship with EcPois
+
+    public function ecPois()
+    {
+        return $this->hasMany(EcPoi::class);
+    }
+
+    // Impersonate user
+
     public function canImpersonate()
     {
         if ($this->isAdmin()) return true;
