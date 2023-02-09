@@ -20,8 +20,8 @@ class EcTrackFactory extends Factory
     {
 
         // Creates some editors
-        if(User::where('is_editor',true)->count()==0) {
-            User::factory(10)->create(['is_editor'=>true]);
+        if (User::where('is_editor', true)->count() == 0) {
+            User::factory(10)->create(['is_editor' => true]);
         }
 
         $lat1 = $this->faker->randomFloat(2, 11, 13);
@@ -30,11 +30,22 @@ class EcTrackFactory extends Factory
         $lng2 = $this->faker->randomFloat(2, 42, 45);
 
         return [
-            'name' => $this->faker->name(),
-            'description' => $this->faker->text(),
+            'name' => [
+                'it' => $this->faker->name(),
+                'en' => $this->faker->name(),
+                'de' => $this->faker->name(),
+                'fr' => $this->faker->name(),
+                'es' => $this->faker->name(),
+            ],
+            'description' => [
+                'it' => $this->faker->text(),
+                'en' => $this->faker->text(),
+                'de' => $this->faker->text(),
+                'fr' => $this->faker->text(),
+                'es' => $this->faker->text(),
+            ],
             'geometry' => DB::raw("(ST_GeomFromText('LINESTRING($lat1 $lng1, $lat2 $lng1, $lat2 $lng2, $lat1 $lng2)'))"),
-            'user_id' => User::where('is_editor',true)->inRandomOrder()->first()->id,
+            'user_id' => User::where('is_editor', true)->inRandomOrder()->first()->id,
         ];
     }
-
 }

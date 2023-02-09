@@ -4,9 +4,12 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
+use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Wm\MapMultiLinestring\MapMultiLinestring;
+
 
 class EcTrack extends Resource
 {
@@ -48,6 +51,8 @@ class EcTrack extends Resource
         return $query->where('user_id', $request->user()->id);
     }
 
+
+
     /**
      * Get the fields displayed by the resource.
      *
@@ -58,8 +63,18 @@ class EcTrack extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name')->sortable()->rules('required'),
             BelongsTo::make('User'),
+            MapMultiLinestring::make('geometry')->withMeta([
+                'center' => ["43", "10"],
+                'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
+                'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
+                'defaultZoom' => 10
+            ]),
+            NovaTabTranslatable::make([
+                Text::make(__('name'), 'name'),
+                Text::make(__('description'), 'description'),
+            ])->hideFromIndex(),
+
         ];
     }
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54e5eab26301b62378978474d36cb2a5",
+    "content-hash": "155b90bdc70a5b44bc98709b2a30f9e0",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6847,8 +6847,53 @@
             "time": "2022-06-03T18:03:27+00:00"
         },
         {
+            "name": "wm/map-multi-linestring",
+            "version": "v0.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webmappsrl/map-multi-linestring.git",
+                "reference": "3b681987efa42b2cddbdac4a20ce903504175aac"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webmappsrl/map-multi-linestring/zipball/3b681987efa42b2cddbdac4a20ce903504175aac",
+                "reference": "3b681987efa42b2cddbdac4a20ce903504175aac",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wm\\MapMultiLinestring\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wm\\MapMultiLinestring\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/webmappsrl/map-multi-linestring/issues",
+                "source": "https://github.com/webmappsrl/map-multi-linestring/tree/v0.0.4"
+            },
+            "time": "2023-02-06T15:35:38+00:00"
+        },
+        {
             "name": "wm/wm-internal",
-            "version": "dev-develop",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "./wm-internal",
