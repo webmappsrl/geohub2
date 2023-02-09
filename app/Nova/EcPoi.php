@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use Wm\MapPoint\MapPoint;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
@@ -59,6 +60,14 @@ class EcPoi extends Resource
         return [
             ID::make()->sortable(),
             Text::make('Name')->sortable()->rules('required'),
+            MapPoint::make('geometry')->withMeta([
+                'center' => ["51", "4"],
+                'attribution' => '<a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
+                'tiles' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                'minZoom' => 5,
+                'maxZoom' => 16,
+                'defaultZoom' => 5
+            ]),
             BelongsTo::make('User'),
         ];
     }
