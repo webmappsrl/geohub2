@@ -25,9 +25,8 @@ class EcPoiFactory extends Factory
             User::factory(10)->create(['is_editor' => true]);
         }
 
-        $lat = $this->faker->latitude();
-        $lng = $this->faker->longitude();
-
+        $lat = $this->faker->randomFloat(6, 10.331693, 10.665219);
+        $lng = $this->faker->randomFloat(6, 43.6516, 43.873329);
         return [
             'name' => $this->faker->name(),
             'description' => $this->faker->text(),
