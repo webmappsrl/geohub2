@@ -2,6 +2,8 @@
 
 namespace App\Nova;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo as RelationsBelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Wm\MapPoint\MapPoint;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -60,6 +62,7 @@ class EcPoi extends Resource
     public function fields(NovaRequest $request)
     {
         return [
+
             ID::make()->sortable(),
 
             NovaTabTranslatable::make([
@@ -67,15 +70,16 @@ class EcPoi extends Resource
                 Text::make(__('description'), 'description'),
             ])->hideFromIndex(),
 
+            $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
+
             MapPoint::make('geometry')->withMeta([
                 'center' => ["51", "4"],
-                'attribution' => '<a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',
-                'tiles' => 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                'minZoom' => 5,
+                'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
+                'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
+                'minZoom' => 7,
                 'maxZoom' => 16,
-                'defaultZoom' => 5
-            ]),
-            BelongsTo::make('User'),
+                'defaultZoom' => 12
+            ])->hideFromIndex(),
         ];
     }
 

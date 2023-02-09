@@ -63,16 +63,19 @@ class EcTrack extends Resource
     {
         return [
             ID::make()->sortable(),
-            BelongsTo::make('User'),
+
+            NovaTabTranslatable::make([
+                Text::make(__('name'), 'name'),
+                Text::make(__('description'), 'description'),
+            ])->hideFromIndex(),
+
+            $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
+
             MapMultiLinestring::make('geometry')->withMeta([
                 'center' => ["43", "10"],
                 'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
                 'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
                 'defaultZoom' => 10
-            ]),
-            NovaTabTranslatable::make([
-                Text::make(__('name'), 'name'),
-                Text::make(__('description'), 'description'),
             ])->hideFromIndex(),
 
         ];
