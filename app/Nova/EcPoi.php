@@ -5,9 +5,11 @@ namespace App\Nova;
 use Wm\MapPoint\MapPoint;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
+
 
 class EcPoi extends Resource
 {
@@ -59,7 +61,12 @@ class EcPoi extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name')->sortable()->rules('required'),
+
+            NovaTabTranslatable::make([
+                Text::make(__('name'), 'name'),
+                Text::make(__('description'), 'description'),
+            ])->hideFromIndex(),
+
             MapPoint::make('geometry')->withMeta([
                 'center' => ["51", "4"],
                 'attribution' => '<a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery (c) <a href="https://www.mapbox.com/">Mapbox</a>',

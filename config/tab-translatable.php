@@ -11,9 +11,7 @@ return [
     /*
      * If you choose array selection, you should add all supported translation on it as "code"
      */
-    'locales' => [
-        'en', 'fr', 'es', 'it', 'de'
-    ],
+    'locales' => ['en', 'fr', 'es', 'it', 'de'],
 
     /*
      * If you choose database selection, you should choose the model responsible for retrieving supported translations
