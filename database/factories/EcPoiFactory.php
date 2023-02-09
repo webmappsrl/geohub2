@@ -27,11 +27,23 @@ class EcPoiFactory extends Factory
 
         $lat = $this->faker->randomFloat(6, 10.331693, 10.665219);
         $lng = $this->faker->randomFloat(6, 43.6516, 43.873329);
+
         return [
-            'name' => $this->faker->name(),
-            'description' => $this->faker->text(),
+            'name' => [
+                'it' => $this->faker->name(),
+                'en' => $this->faker->name(),
+                'de' => $this->faker->name(),
+                'fr' => $this->faker->name(),
+                'es' => $this->faker->name(),
+            ],
+            'description' => [
+                'it' => $this->faker->text(),
+                'en' => $this->faker->text(),
+                'de' => $this->faker->text(),
+                'fr' => $this->faker->text(),
+                'es' => $this->faker->text(),
+            ],
             'geometry' => DB::raw("ST_GeomFromText('POINT($lat $lng)')"),
-            // 'geobox_areas' => $this->faker->json_encode(),
             'user_id' => User::where('is_editor', true)->inRandomOrder()->first()->id,
         ];
     }
