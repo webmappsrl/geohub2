@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "54e5eab26301b62378978474d36cb2a5",
+    "content-hash": "d070821579d58e42ef53a44d4265a28b",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -6847,8 +6847,53 @@
             "time": "2022-06-03T18:03:27+00:00"
         },
         {
+            "name": "wm/map-point",
+            "version": "v0.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/webmappsrl/map-point.git",
+                "reference": "c69abab7bb667e34e508cb0f6698a9239d5317e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/webmappsrl/map-point/zipball/c69abab7bb667e34e508cb0f6698a9239d5317e6",
+                "reference": "c69abab7bb667e34e508cb0f6698a9239d5317e6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Wm\\MapPoint\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Wm\\MapPoint\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/webmappsrl/map-point/issues",
+                "source": "https://github.com/webmappsrl/map-point/tree/v0.0.5"
+            },
+            "time": "2023-02-06T14:49:19+00:00"
+        },
+        {
             "name": "wm/wm-internal",
-            "version": "dev-develop",
+            "version": "dev-feature/9febbraio2023_rubens_map_point_implementation",
             "dist": {
                 "type": "path",
                 "url": "./wm-internal",
