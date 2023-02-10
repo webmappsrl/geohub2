@@ -20,6 +20,7 @@ class UserSeeder extends Seeder
             'email' => 'team@webmapp.it',
             'password' => bcrypt('webmapp'),
             'is_admin' => true,
+            'type' => 'admin',
         ])->markEmailAsVerified();
 
         User::factory()->create([
@@ -27,18 +28,19 @@ class UserSeeder extends Seeder
             'email' => 'editor@webmapp.it',
             'password' => bcrypt('webmapp'),
             'is_editor' => true,
+            'type' => 'editor',
         ])->markEmailAsVerified();
 
         User::factory()->create([
             'name' => 'Contributor',
             'email' => 'contributor@webmapp.it',
             'password' => bcrypt('webmapp'),
+            'type' => 'contributor',
         ])->markEmailAsVerified();
 
         // 10 contributor
-        User::factory(100)->create(['password'=>bcrypt('webmapp')]);
+        User::factory(100)->create(['password' => bcrypt('webmapp')]);
         // 10 editor
-        User::factory(10)->create(['is_editor'=>true,'password'=>bcrypt('webmapp')]);
-
+        User::factory(10)->create(['is_editor' => true, 'password' => bcrypt('webmapp')]);
     }
 }
