@@ -58,16 +58,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.258.6",
+            "version": "3.258.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "5284c04bc409dfafc7751d9b80a8e2217aaca68a"
+                "reference": "09808d51cdb3cf01df1564dda4236da61ed9c804"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5284c04bc409dfafc7751d9b80a8e2217aaca68a",
-                "reference": "5284c04bc409dfafc7751d9b80a8e2217aaca68a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/09808d51cdb3cf01df1564dda4236da61ed9c804",
+                "reference": "09808d51cdb3cf01df1564dda4236da61ed9c804",
                 "shasum": ""
             },
             "require": {
@@ -146,9 +146,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.6"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.7"
             },
-            "time": "2023-02-08T19:25:07+00:00"
+            "time": "2023-02-09T19:23:14+00:00"
         },
         {
             "name": "brick/math",
@@ -4104,16 +4104,16 @@
         },
         {
             "name": "rap2hpoutre/fast-excel",
-            "version": "v5.1.0",
+            "version": "v5.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rap2hpoutre/fast-excel.git",
-                "reference": "e0a499c4b7942a54fd91d0e1576693b412bd48e0"
+                "reference": "05bc956fa6121b239c98960ea9b551116f20b058"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rap2hpoutre/fast-excel/zipball/e0a499c4b7942a54fd91d0e1576693b412bd48e0",
-                "reference": "e0a499c4b7942a54fd91d0e1576693b412bd48e0",
+                "url": "https://api.github.com/repos/rap2hpoutre/fast-excel/zipball/05bc956fa6121b239c98960ea9b551116f20b058",
+                "reference": "05bc956fa6121b239c98960ea9b551116f20b058",
                 "shasum": ""
             },
             "require": {
@@ -4162,7 +4162,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rap2hpoutre/fast-excel/issues",
-                "source": "https://github.com/rap2hpoutre/fast-excel/tree/v5.1.0"
+                "source": "https://github.com/rap2hpoutre/fast-excel/tree/v5.1.1"
             },
             "funding": [
                 {
@@ -4170,7 +4170,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-02T19:26:50+00:00"
+            "time": "2023-02-09T15:13:18+00:00"
         },
         {
             "name": "spatie/db-dumper",
@@ -7081,7 +7081,7 @@
         },
         {
             "name": "wm/wm-internal",
-            "version": "dev-feature/10febbraio2023_rubens_ecpoi_search_and_filter",
+            "version": "dev",
             "dist": {
                 "type": "path",
                 "url": "./wm-internal",
