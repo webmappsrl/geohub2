@@ -2,8 +2,6 @@
 
 namespace App\Nova;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo as RelationsBelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Wm\MapPoint\MapPoint;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
@@ -11,6 +9,9 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
+use Illuminate\Database\Eloquent\Relations\BelongsTo as RelationsBelongsTo;
 
 
 class EcPoi extends Resource
@@ -35,7 +36,7 @@ class EcPoi extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'name', 'description'
     ];
 
     /**
@@ -67,8 +68,8 @@ class EcPoi extends Resource
 
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
-                Text::make(__('description'), 'description'),
-            ])->hideFromIndex(),
+                Text::make(__('description'), 'description')->hideFromIndex(),
+            ]),
 
             $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
 
@@ -102,6 +103,12 @@ class EcPoi extends Resource
      */
     public function filters(NovaRequest $request)
     {
+        if ($request->user()->isAdmin()) return [
+            (new NovaSearchableBelongsToFilter('User'))
+                ->fieldAttribute('user')
+                ->filterBy('user_id'),
+        ];
+
         return [];
     }
 
