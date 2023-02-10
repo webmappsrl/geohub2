@@ -10,7 +10,7 @@ use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Wm\MapMultiLinestring\MapMultiLinestring;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
-
+use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
 
 class EcTrack extends Resource
 {
@@ -34,7 +34,7 @@ class EcTrack extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id', 'name', 'description'
     ];
 
     /**
@@ -67,8 +67,8 @@ class EcTrack extends Resource
 
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
-                Text::make(__('description'), 'description'),
-            ])->hideFromIndex(),
+                Text::make(__('description'), 'description')->hideFromIndex(),
+            ]),
 
             $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
 
@@ -101,6 +101,12 @@ class EcTrack extends Resource
      */
     public function filters(NovaRequest $request)
     {
+        if ($request->user()->isAdmin()) return [
+            (new NovaSearchableBelongsToFilter('User'))
+                ->fieldAttribute('user')
+                ->filterBy('user_id'),
+        ];
+
         return [];
     }
 
