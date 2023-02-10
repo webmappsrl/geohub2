@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78f02680ab03e0958c004a5ee325c7df",
+    "content-hash": "55530f4ceeabe628623859610c520f77",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -1592,6 +1592,54 @@
                 }
             ],
             "time": "2023-01-17T01:02:51+00:00"
+        },
+        {
+            "name": "khalin/nova4-searchable-belongs-to-filter",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oleghalin/nova4-searchable-belongs-to-filter.git",
+                "reference": "0cf85d0d1f96d70e2a21ea89e9438c901fdc5d16"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oleghalin/nova4-searchable-belongs-to-filter/zipball/0cf85d0d1f96d70e2a21ea89e9438c901fdc5d16",
+                "reference": "0cf85d0d1f96d70e2a21ea89e9438c901fdc5d16",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "php": ">=7.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Khalin\\Nova4SearchableBelongsToFilter\\FilterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Khalin\\Nova4SearchableBelongsToFilter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Searchable Nova 4 filter for belongsTo relationships.",
+            "keywords": [
+                "belongs-to",
+                "filter",
+                "laravel",
+                "nova",
+                "nova-4"
+            ],
+            "support": {
+                "source": "https://github.com/oleghalin/nova4-searchable-belongs-to-filter/tree/1.0.1"
+            },
+            "time": "2022-04-18T10:06:48+00:00"
         },
         {
             "name": "kongulov/nova-tab-translatable",
@@ -7033,7 +7081,7 @@
         },
         {
             "name": "wm/wm-internal",
-            "version": "dev-feature/10febbraio2023_gennaro_NOVA_dashboard_cards_",
+            "version": "dev",
             "dist": {
                 "type": "path",
                 "url": "./wm-internal",

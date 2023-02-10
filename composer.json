@@ -10,6 +10,7 @@
     "require": {
         "php": "^8.0.2",
         "guzzlehttp/guzzle": "^7.2",
+        "khalin/nova4-searchable-belongs-to-filter": "^1.0",
         "kongulov/nova-tab-translatable": "^2.0",
         "laravel/framework": "^9.19",
         "laravel/nova": "~4.0",
@@ -18,8 +19,8 @@
         "league/flysystem-aws-s3-v3": "^3.10",
         "spatie/db-dumper": "^3.3",
         "spatie/laravel-translatable": "^6.1",
-        "wm/map-point": "^0.0.5",
         "wm/map-multi-linestring": "^0.0.4",
+        "wm/map-point": "^0.0.5",
         "wm/wm-internal": "*",
         "wm/wm-package": "*"
     },
