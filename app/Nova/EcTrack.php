@@ -4,11 +4,12 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Laravel\Nova\Fields\Text;
+use App\Nova\Metrics\TracksMetric;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Wm\MapMultiLinestring\MapMultiLinestring;
+use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 
 
 class EcTrack extends Resource
