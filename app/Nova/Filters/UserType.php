@@ -2,6 +2,7 @@
 
 namespace App\Nova\Filters;
 
+use App\Enums\UserRole;
 use Laravel\Nova\Filters\Filter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -24,7 +25,7 @@ class UserType extends Filter
      */
     public function apply(NovaRequest $request, $query, $value)
     {
-        return $query->where('type', $value);
+        return $query->where('role', $value);
     }
 
     /**
@@ -36,9 +37,9 @@ class UserType extends Filter
     public function options(NovaRequest $request)
     {
         return [
-            'Administrator' => 'admin',
-            'Editor' => 'editor',
-            'Contributor' => 'contributor',
+            UserRole::Admin->value,
+            UserRole::Editor->value,
+            UserRole::Contributor->value,
         ];
     }
 }

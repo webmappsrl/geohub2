@@ -54,7 +54,7 @@ class User extends ModelUser
      */
     public function isAdmin(): bool
     {
-        return $this->role == UserRole::Admin->value;
+        return $this->role == UserRole::Admin;
     }
 
     /**
@@ -64,8 +64,7 @@ class User extends ModelUser
      */
     public function isEditor(): bool
     {
-        return $this->role == UserRole::Editor->value;
-
+        return $this->role == UserRole::Editor;
     }
     /**
      * This method checks if the user is contributor
@@ -74,7 +73,7 @@ class User extends ModelUser
      */
     public function isContributor(): bool
     {
-        return $this->role == UserRole::Contributor->value;
+        return $this->role == UserRole::Contributor;
     }
 
     /**
@@ -84,7 +83,7 @@ class User extends ModelUser
      */
     public function getRole(): string
     {
-        return $this->role;
+        return $this->role->value;
     }
     // Relationship with  EcTracks
 
