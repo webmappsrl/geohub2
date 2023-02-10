@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -21,9 +21,10 @@ class EcPoiFactory extends Factory
     {
 
         // Creates some editors
-        if (User::where('is_editor', true)->count() == 0) {
-            User::factory(10)->create(['is_editor' => true]);
+        if (User::where('role', UserRole::Editor->value)->count() == 0) {
+            User::factory(10)->create(['role' => UserRole::Editor->value]);
         }
+
 
         $lat = $this->faker->randomFloat(6, 10.331693, 10.665219);
         $lng = $this->faker->randomFloat(6, 43.6516, 43.873329);
@@ -44,7 +45,7 @@ class EcPoiFactory extends Factory
                 'es' => $this->faker->text(),
             ],
             'geometry' => DB::raw("ST_GeomFromText('POINT($lat $lng)')"),
-            'user_id' => User::where('is_editor', true)->inRandomOrder()->first()->id,
+            'user_id' => User::where('role', UserRole::Editor->value)->inRandomOrder()->first()->id,
         ];
     }
 }

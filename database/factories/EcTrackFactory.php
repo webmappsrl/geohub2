@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +21,8 @@ class EcTrackFactory extends Factory
     {
 
         // Creates some editors
-        if (User::where('is_editor', true)->count() == 0) {
-            User::factory(10)->create(['is_editor' => true]);
+        if (User::where('role', UserRole::Editor->value)->count() == 0) {
+            User::factory(10)->create(['role' => UserRole::Editor->value]);
         }
 
         $lat1 = $this->faker->randomFloat(6, 10.331693, 10.665219);
@@ -45,7 +46,7 @@ class EcTrackFactory extends Factory
                 'es' => $this->faker->text(),
             ],
             'geometry' => DB::raw("(ST_GeomFromText('LINESTRING($lat1 $lng1, $lat2 $lng1, $lat2 $lng2, $lat1 $lng2)'))"),
-            'user_id' => User::where('is_editor', true)->inRandomOrder()->first()->id,
+            'user_id' => User::where('role', UserRole::Editor->value)->inRandomOrder()->first()->id,
         ];
     }
 }

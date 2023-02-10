@@ -2,7 +2,8 @@
 
 namespace App\Nova;
 
-
+use App\Nova\Filters\UserType;
+use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Illuminate\Validation\Rules;
@@ -85,7 +86,9 @@ class User extends Resource
      */
     public function filters(NovaRequest $request)
     {
-        return [];
+        return [
+            new UserType,
+        ];
     }
 
     /**
