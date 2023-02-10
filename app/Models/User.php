@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Enums\UserRole;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Nova\Auth\Impersonatable;
@@ -42,6 +44,7 @@ class User extends ModelUser
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => UserRole::class,
     ];
 
     /**
@@ -51,7 +54,7 @@ class User extends ModelUser
      */
     public function isAdmin(): bool
     {
-        return $this->is_admin;
+        return $this->role == UserRole::Admin->value;
     }
 
     /**
@@ -61,10 +64,8 @@ class User extends ModelUser
      */
     public function isEditor(): bool
     {
-        if ($this->is_admin) {
-            return false;
-        }
-        return $this->is_editor;
+        return $this->role == UserRole::Editor->value;
+
     }
     /**
      * This method checks if the user is contributor
@@ -73,10 +74,7 @@ class User extends ModelUser
      */
     public function isContributor(): bool
     {
-        if (!$this->is_editor && !$this->is_admin) {
-            return true;
-        }
-        return false;
+        return $this->role == UserRole::Contributor->value;
     }
 
     /**
@@ -86,12 +84,7 @@ class User extends ModelUser
      */
     public function getRole(): string
     {
-        if ($this->is_admin) {
-            return 'admin';
-        } elseif ($this->is_editor && !$this->is_admin) {
-            return 'editor';
-        }
-        return 'contributor';
+        return $this->role;
     }
     // Relationship with  EcTracks
 

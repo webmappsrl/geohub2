@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserRole;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -19,28 +20,26 @@ class UserSeeder extends Seeder
             'name' => 'Webmapp',
             'email' => 'team@webmapp.it',
             'password' => bcrypt('webmapp'),
-            'is_admin' => true,
-            'type' => 'admin',
+            'role' => UserRole::Admin->value,
         ])->markEmailAsVerified();
 
         User::factory()->create([
             'name' => 'Editor',
             'email' => 'editor@webmapp.it',
             'password' => bcrypt('webmapp'),
-            'is_editor' => true,
-            'type' => 'editor',
+            'role' => UserRole::Editor->value,
         ])->markEmailAsVerified();
 
         User::factory()->create([
             'name' => 'Contributor',
             'email' => 'contributor@webmapp.it',
             'password' => bcrypt('webmapp'),
-            'type' => 'contributor',
+            'role' => UserRole::Contributor->value,
         ])->markEmailAsVerified();
 
-        // 10 contributor
+        // 100 contributor
         User::factory(100)->create(['password' => bcrypt('webmapp')]);
         // 10 editor
-        User::factory(10)->create(['is_editor' => true, 'password' => bcrypt('webmapp')]);
+        User::factory(10)->create(['role' => UserRole::Editor->value, 'password' => bcrypt('webmapp')]);
     }
 }
