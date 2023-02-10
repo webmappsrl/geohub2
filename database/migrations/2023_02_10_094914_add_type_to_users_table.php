@@ -31,7 +31,9 @@ return new class extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('type');
+            $table->dropColumn('role');
+            $table->boolean('is_admin')->default(false);
+            $table->boolean('is_editor')->default(false);
         });
     }
 };
