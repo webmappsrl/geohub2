@@ -4,11 +4,12 @@ namespace App\Nova;
 
 use App\Nova\Filters\UserType;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rules;
-use Laravel\Nova\Fields\Gravatar;
 use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
+use Illuminate\Validation\Rules;
+use App\Nova\Metrics\UsersMetric;
+use Laravel\Nova\Fields\Gravatar;
+use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class User extends Resource
