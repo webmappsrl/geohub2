@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 
+use App\Nova\User;
 use App\Nova\EcPoi;
 use App\Nova\EcTrack;
 use Laravel\Nova\Nova;
@@ -97,6 +98,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Content', [
                     MenuItem::resource(EcTrack::class),
                     MenuItem::resource(EcPoi::class),
+                ])->collapsable(),
+                MenuSection::make('Admin', [
+                    MenuItem::resource(User::class),
                 ])->collapsable(),
             ];
         });
