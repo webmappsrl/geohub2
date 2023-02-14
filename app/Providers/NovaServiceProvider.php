@@ -89,7 +89,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
         //
     }
 
-   private function getFooter()
+    private function getFooter()
     {
         Nova::footer(function () {
             return Blade::render('nova/footer');
@@ -104,10 +104,10 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Content', [
                     MenuItem::resource(EcTrack::class),
                     MenuItem::resource(EcPoi::class),
-                ])->collapsable(),
+                ])->icon('document-text')->collapsable(),
                 MenuSection::make('Admin', [
                     MenuItem::resource(User::class),
-                ])->collapsable(),
+                ])->icon('user')->collapsable(),
             ];
         });
     }
