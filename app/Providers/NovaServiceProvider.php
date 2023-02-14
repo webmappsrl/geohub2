@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use Laravel\Nova\Nova;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Blade;
 use App\Nova\User;
 use App\Nova\EcPoi;
@@ -95,7 +93,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         Nova::footer(function () {
             return Blade::render('nova/footer');
-        }
+        });
     }
 
     private function getCustomMenu()
