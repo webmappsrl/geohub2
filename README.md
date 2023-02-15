@@ -13,12 +13,14 @@ Replace `${instance name}` with the instance name (APP_NAME in .env file)
 
 ```sh
 git clone git@github.com:webmappsrl/${instance name}.git
+```
+Important NOTE: remember to checkout the develop branch.
+
+```sh
 cd ${instance name}
 bash docker/init-docker.sh
 geobox_install ${instance name}
 ```
-
-Important NOTE: remember to checkout the develop branch.
 
 ## Run web server from shell outside docker
 
