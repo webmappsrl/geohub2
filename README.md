@@ -6,6 +6,29 @@ Webmapp's Starting point
 
 Boilerplate per Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
 
+## INSTALL
+
+First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command. 
+Replace `${instance name}` with the instance name (APP_NAME in .env file) 
+
+```sh
+git clone git@github.com:webmappsrl/${instance name}.git
+cd ${instance name}
+bash docker/init-docker.sh
+geobox_install ${instance name}
+```
+
+Important NOTE: remember to checkout the develop branch.
+
+## Run web server from shell outside docker
+
+In order to start a web server in local environment use the following command:
+Replace `${instance name}` with the instance name (APP_NAME in .env file) 
+
+```sh
+geobox_serve ${instance name}
+```
+
 ### Differenze ambiente produzione locale
 
 Questo sistema di container docker è utilizzabile sia per lo sviluppo locale sia per un sistema in produzione. In locale abbiamo queste caratteristiche:
