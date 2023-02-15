@@ -6,6 +6,27 @@ Webmapp's Starting point
 
 Geohub2 in Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
 
+## INSTALL
+
+First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command. 
+
+```sh
+git clone git@github.com:webmappsrl/geohub2.git
+cd geohub2
+bash docker/init-docker.sh
+geobox_install geohub2
+```
+
+Important NOTE: remember to checkout the develop branch.
+
+## Run geohub2 server from shell outside docker
+
+In order to start a hoqu server in local environment use the following command:
+
+```sh
+geobox_serve geohub2
+```
+
 ### Differenze ambiente produzione locale
 
 Questo sistema di container docker è utilizzabile sia per lo sviluppo locale sia per un sistema in produzione. In locale abbiamo queste caratteristiche:
