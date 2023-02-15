@@ -21,7 +21,7 @@ Important NOTE: remember to checkout the develop branch.
 
 ## Run geohub2 server from shell outside docker
 
-In order to start a hoqu server in local environment use the following command:
+In order to start a geohub2 server in local environment use the following command:
 
 ```sh
 geobox_serve geohub2
