@@ -3,14 +3,18 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+use App\Enums\UserRole;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Nova\Auth\Impersonatable;
+use Wm\WmPackage\Model\User as ModelUser;
+
+
+
+class User extends ModelUser
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasFactory, Notifiable, Impersonatable;
 
     /**
      * The attributes that are mass assignable.
@@ -40,5 +44,71 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => UserRole::class,
     ];
+
+    /**
+     * This method checks if the user is admin
+     *
+     * @return boolean
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role == UserRole::Admin;
+    }
+
+    /**
+     * This method checks if the user is editor
+     *
+     * @return boolean
+     */
+    public function isEditor(): bool
+    {
+        return $this->role == UserRole::Editor;
+    }
+    /**
+     * This method checks if the user is contributor
+     *
+     * @return boolean
+     */
+    public function isContributor(): bool
+    {
+        return $this->role == UserRole::Contributor;
+    }
+
+    /**
+     * This method returns the user role
+     *
+     * @return string
+     */
+    public function getRole(): string
+    {
+        return $this->role->value;
+    }
+    // Relationship with  EcTracks
+
+    public function ecTracks()
+    {
+        return $this->hasMany(EcTrack::class);
+    }
+
+    // Relationship with EcPois
+
+    public function ecPois()
+    {
+        return $this->hasMany(EcPoi::class);
+    }
+
+    // Impersonate user
+
+    public function canImpersonate()
+    {
+        if ($this->isAdmin()) return true;
+        return false;
+    }
+    public function canBeImpersonated()
+    {
+        if (!$this->isAdmin()) return true;
+        return false;
+    }
 }

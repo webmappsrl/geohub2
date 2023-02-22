@@ -1,34 +1,61 @@
-# Laravel Postgis Boilerplate
+# Geohub 2
 
 Webmapp's Starting point
 
-## Laravel 9 Project based on Nova 4
+## Geohub2 based on Nova 4
 
-### Inizializzazione tramite boilerplate
+Geohub2 in Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
 
--   Download del codice del boilerplate in una nuova cartella `nuovoprogetto` e disattivare il collegamento tra locale/remote:
-    ```sh
-    git clone https://github.com/webmappsrl/laravel-postgis-boilerplate.git nuovoprogetto
-    cd nuovoprogetto
-    git remote remove origin
-    ```
--   Effettuare il link tra la repository locale e quella remota (repository vuota github)
+## INSTALL
 
-    ```sh
-    git remote add origin git@github.com:username/repo.git
-    ```
+First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command. 
+
+```sh
+git clone git@github.com:webmappsrl/geohub2.git
+cd geohub2
+bash docker/init-docker.sh
+geobox_install geohub2
+```
+
+Important NOTE: remember to checkout the develop branch.
+
+## Run geohub2 server from shell outside docker
+
+In order to start a geohub2 server in local environment use the following command:
+
+```sh
+geobox_serve geohub2
+```
+
+### Differenze ambiente produzione locale
+
+Questo sistema di container docker è utilizzabile sia per lo sviluppo locale sia per un sistema in produzione. In locale abbiamo queste caratteristiche:
+
+-   la possibilità di lanciare il processo processo `php artisan serve` all'interno del container phpfpm, quindi la configurazione della porta `DOCKER_SERVE_PORT` (default: `8000`) necessaria al progetto. Se servono più istanze laravel con processo artisan serve contemporaneamente in locale, valutare di dedicare una porta tcp dedicata ad ognuno di essi. Per fare questo basta solo aggiornare `DOCKER_SERVE_PORT`.
+-   la presenza di xdebug, definito in fase di build dell'immagine durante l'esecuzione del comando
+-   `APP_ENV=local`, `APP_DEBUG=true` e `LOG_LEVEL=debug` che istruiscono laravel su una serie di comportamenti per il debug e l'esecuzione locale dell'applicativo
+-   Una password del db con complessità minore. **In produzione usare [password complesse](https://www.avast.com/random-password-generator#pc)**
+
+### Inizializzazione
 
 -   Copy file `.env-example` to `.env`
 
     Questi valori nel file .env sono necessari per avviare l'ambiente docker. Hanno un valore di default e delle convenzioni associate, valutare la modifica:
 
-    -   `APP_NAME` (it's php container name and - postgrest container name, no space)
     -   `DOCKER_PHP_PORT` (Incrementing starting from 9100 to 9199 range for MAC check with command "lsof -iTCP -sTCP:LISTEN")
-    -   `DOCKER_SERVE_PORT` (always 8000)
+    -   `DOCKER_SERVE_PORT` (always 8000, only on local environment)
     -   `DOCKER_PROJECT_DIR_NAME` (it's the folder name of the project)
     -   `DB_DATABASE`
     -   `DB_USERNAME`
     -   `DB_PASSWORD`
+
+    Se siamo in produzione, rimuovere (o commentare) la riga:
+
+    ```yml
+    - ${DOCKER_SERVE_PORT}:8000
+    ```
+
+    dal file `docker-compose.yml`
 
 -   Creare l'ambiente docker
     ```sh
@@ -42,10 +69,10 @@ Webmapp's Starting point
     docker ps
     ```
 
--   Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve (utilizzare `APP_NAME` al posto di `$nomeApp`):
+-   Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve:
 
     ```sh
-    docker exec -it php81_$nomeApp bash
+    docker exec -it php81_geohub2 bash
     composer install
     php artisan key:generate
     php artisan optimize
@@ -53,11 +80,13 @@ Webmapp's Starting point
     php artisan serve --host 0.0.0.0
     ```
 
--   A questo punto l'applicativo è in ascolto su <http://127.0.0.1:8000>
+-   A questo punto l'applicativo è in ascolto su <http://127.0.0.1:8000> (la porta è quella definita in `DOCKER_SERVE_PORT`)
 
-### Configurazione xdebug
+### Configurazione xdebug vscode (solo in locale)
 
-Una volta avviato il container con xdebug configurare il file `.vscode/launch.json` con la path della cartella del progetto sul sistema host. Eg:
+Assicurarsi di aver installato l'estensione [PHP Debug](https://marketplace.visualstudio.com/items?itemName=xdebug.php-debug).
+
+Una volta avviato il container con xdebug configurare il file `.vscode/launch.json`, in particolare il `pathMappings` tenendo presente che **sulla sinistra abbiamo la path dove risiede il progetto all'interno del container**, `${workspaceRoot}` invece rappresenta la pah sul sistema host. Eg:
 
 ```json
 {
@@ -69,21 +98,33 @@ Una volta avviato il container con xdebug configurare il file `.vscode/launch.js
             "request": "launch",
             "port": 9200,
             "pathMappings": {
-                "/var/www/html/geomixer2": "${workspaceRoot}"
+                "/var/www/html/geohub2": "${workspaceRoot}"
             }
         }
     ]
 }
 ```
 
-Aggiornare `/var/www/html/geomixer2` con la path della cartella sul proprio computer.
+Aggiornare `/var/www/html/geohub2` con la path della cartella del progetto nel container phpfpm.
+
+Per utilizzare xdebug **su browser** utilizzare uno di questi 2 metodi:
+
+-   Installare estensione xdebug per browser [Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc)
+-   Utilizzare il query param `XDEBUG_SESSION_START=1` nella url che si vuole debuggare
+-   Altro, [vedi documentazione xdebug](https://xdebug.org/docs/step_debug#web-application)
+
+Invece **su cli** digitare questo prima di invocare il comando php da debuggare:
+
+```bash
+export XDEBUG_SESSION=1
+```
 
 ### Scripts
 
-Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `$nomeApp`):
+Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `geohub2`):
 
 ```bash
-docker exec -it php81_$nomeApp bash scripts/deploy_dev.sh
+docker exec -it php81_geohub2 bash scripts/deploy_dev.sh
 ```
 
 ### Artisan commands
@@ -105,7 +146,11 @@ Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura s
       chown -R 33 storage
     ```
 
--   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
-    ```bash
-    docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
-    ```
+-   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `geohub2`):
+    `bash
+docker exec -u 0 -it php81_geohub2 bash scripts/deploy_dev.sh
+`
+
+Xdebug potrebbe non trovare il file di log configurato nel .ini, quindi generare vari warnings
+
+-   creare un file in `/var/log/xdebug.log` all'interno del container phpfpm. Eseguire un `chown www-data /var/log/xdebug.log`. Creare questo file solo se si ha esigenze di debug errori xdebug (impossibile analizzare il codice tramite breakpoint) visto che potrebbe crescere esponenzialmente nel tempo
