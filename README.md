@@ -4,11 +4,11 @@ Webmapp's Starting point
 
 ## Geohub2 based on Nova 4
 
-Geohub2 in Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
+Geohub2 in Laravel 10 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
 
 ## INSTALL
 
-First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command. 
+First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command.
 
 ```sh
 git clone git@github.com:webmappsrl/geohub2.git
