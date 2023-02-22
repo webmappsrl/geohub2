@@ -2,18 +2,20 @@
 
 Webmapp's Starting point
 
-## Laravel 9 Project based on Nova 4
+## Laravel 10 Project based on Nova 4
 
-Boilerplate per Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
+Boilerplate per Laravel 10 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
 
 ## INSTALL
 
-First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command. 
-Replace `${instance name}` with the instance name (APP_NAME in .env file) 
+First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command.
+Replace `${instance name}` with the instance name (APP_NAME in .env file)
 
 ```sh
 git clone git@github.com:webmappsrl/${instance name}.git
+git flow init
 ```
+
 Important NOTE: remember to checkout the develop branch.
 
 ```sh
@@ -25,7 +27,7 @@ geobox_install ${instance name}
 ## Run web server from shell outside docker
 
 In order to start a web server in local environment use the following command:
-Replace `${instance name}` with the instance name (APP_NAME in .env file) 
+Replace `${instance name}` with the instance name (APP_NAME in .env file)
 
 ```sh
 geobox_serve ${instance name}
@@ -162,6 +164,7 @@ Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura s
     ```bash
       chown -R 33 storage
     ```
+
     NOTA: per eseguire il comando chown potrebbe essere necessario avere i privilegi di root. In questo caso si deve effettuare l'accesso al cointainer del docker utilizzando lo specifico utente root (-u 0). Questo è valido anche sbloccare la possibilità di scrivere nella cartella /var/log per il funzionamento di Xdedug
 
 -   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
