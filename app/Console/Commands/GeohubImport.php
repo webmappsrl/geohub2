@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
+use App\Enums\UserRole;
 use Illuminate\Console\Command;
+use Illuminate\Hashing\BcryptHasher;
 
 class GeohubImport extends Command
 {
@@ -25,6 +28,26 @@ class GeohubImport extends Command
      */
     public function handle(): void
     {
-        //
+        //IMPORT USERS
+        $usersData = json_decode(file_get_contents('https://geohub.webmapp.it/api/export/editors'), true);
+        $this->importUsers($usersData);
+        $this->info('everything imported correctly');
+    }
+
+    private function importUsers($data)
+    {
+        $this->info('Importing User');
+        foreach ($data as $element) {
+            $this->info("Creating user {$element['name']}");
+
+            User::updateOrCreate([
+                'email' => $element['email']
+            ], [
+                'name' => $element['name'],
+                'password' => $element['geopass'],
+                'role' => UserRole::Editor,
+
+            ]);
+        }
     }
 }
