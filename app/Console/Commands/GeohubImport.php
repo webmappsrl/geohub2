@@ -35,7 +35,6 @@ class GeohubImport extends Command
 
         $tracksData = json_decode(file_get_contents('https://geohub.webmapp.it/api/export/tracks'), true);
         $this->importTracks($tracksData);
-        $this->info('everything imported correctly');
     }
 
     private function importUsers($data)
@@ -63,51 +62,50 @@ class GeohubImport extends Command
             // transform input into array
             $customerEmails = explode(',', implode(',', $this->option('customer_email')));
             $this->info("Finding selected Users tracks");
-            $requestedTrack;
-            $totalTracks = count($data);
-            $counter = 1;
 
             // Filter tracks based on inputs
-            foreach ($data as $key => $element) {
-                $trackProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . $key), true);
-                $this->info("checked $counter / $totalTracks");
-                $counter++;
-
-                foreach ($customerEmails as $customerEmail) {
-                    if ($customerEmail == $trackProps['properties']['author_email']) {
-                        $requestedTrack = $trackProps;
-
+            foreach ($customerEmails as $customerEmail) {
+                $this->info("Checking tracks for $customerEmail");
+                $requestedTracks = json_decode(file_get_contents('https://geohub.webmapp.it/api/export/tracks/' . $customerEmail), true);
+                if (empty($requestedTracks)) {
+                    $this->info("No tracks found for {$customerEmail}");
+                } else {
+                    $this->info("start importing " . count($requestedTracks) . " tracks for {$customerEmail}");
+                    foreach ($requestedTracks as $key => $requestedTrack) {
+                        $trackProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . $key), true);
                         EcTrack::updateOrCreate([
-                            'geohub_id' => $requestedTrack['properties']['id']
+                            'geohub_id' => $trackProps['properties']['id']
                         ], [
-                            'name' => $requestedTrack['properties']['name'],
-                            'description' => $requestedTrack['properties']['description'],
-                            'excerpt' => $requestedTrack['properties']['excerpt'],
-                            'user_id' => User::where('email', $requestedTrack['properties']['author_email'])->first()->id
+                            'name' => $trackProps['properties']['name'],
+                            'description' => $trackProps['properties']['description'],
+                            'excerpt' => $trackProps['properties']['excerpt'],
+                            'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
                         ]);
-                        $this->info("Track {$requestedTrack["properties"]["name"]["it"]} of {$requestedTrack["properties"]["author_email"]} imported correctly");
+                        $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
                     }
                 }
             }
-        }
+        } else {
 
-        // If no customer email is provided, all tracks will be imported
-        $tracks = count($data);
-        $counter = 1;
-        foreach ($data as $key => $element) {
-            $this->info("Importing track $counter / $tracks");
-            $counter++;
+            // If no customer email is provided, all tracks will be imported
+            $tracks = count($data);
+            $counter = 1;
+            foreach ($data as $key => $element) {
+                $this->info("Importing track $counter / $tracks");
+                $counter++;
 
-            $trackProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . $key), true);
+                $trackProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . $key), true);
 
-            EcTrack::updateOrCreate([
-                'geohub_id' => $trackProps['properties']['id']
-            ], [
-                'name' => $trackProps['properties']['name'],
-                'description' => $trackProps['properties']['description'],
-                'excerpt' => $trackProps['properties']['excerpt'],
-                'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
-            ]);
+                EcTrack::updateOrCreate([
+                    'geohub_id' => $trackProps['properties']['id']
+                ], [
+                    'name' => $trackProps['properties']['name'],
+                    'description' => $trackProps['properties']['description'],
+                    'excerpt' => $trackProps['properties']['excerpt'],
+                    'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
+                ]);
+                $this->info('everything imported correctly');
+            }
         }
     }
 }
