@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('ec_pois', function (Blueprint $table) {
+            $table->integer('geohub_id')->unique()->nullable();
             $table->text('excerpt')->nullable();
             $table->integer('feature_image')->nullable()->unsigned();
             $table->text('contact_phone')->nullable();
@@ -78,6 +79,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('ec_pois', function (Blueprint $table) {
+            $table->dropColumn('geohub_id');
             $table->dropColumn('excerpt');
             $table->dropColumn('feature_image');
             $table->dropColumn('contact_phone');
