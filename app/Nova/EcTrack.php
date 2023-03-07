@@ -74,7 +74,7 @@ class EcTrack extends Resource
             $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
             DateTime::make(__('Created At'), 'created_at')->sortable(),
             DateTime::make(__('Updated At'), 'updated_at')->sortable(),
-            Text::make('Geohub ID', 'geohub_id')->hideFromIndex(),
+            Text::make('Geohub ID', 'geohub_id')->onlyOnDetail(),
             MapMultiLinestring::make('geometry')->withMeta([
                 'center' => ["43", "10"],
                 'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',

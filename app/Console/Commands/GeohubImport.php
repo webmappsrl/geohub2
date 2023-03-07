@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Enums\UserRole;
 use App\Models\EcTrack;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Hashing\BcryptHasher;
 
 class GeohubImport extends Command
@@ -15,7 +16,7 @@ class GeohubImport extends Command
      *
      * @var string
      */
-    protected $signature = 'geohub:import {--customer_email=*}'; // <-- allows to pass multiple values in the command line to retrieve tracks
+    protected $signature = 'geohub:import {--customer_email=* : comma separated emails (e.g. portable@webmapp.it,ucvs@webmapp.it)}'; // <-- allows to pass multiple values in the command line to retrieve tracks
 
     /**
      * The console command description.
@@ -29,11 +30,29 @@ class GeohubImport extends Command
      */
     public function handle(): void
     {
+        $apiUrl = 'https://geohub.webmapp.it/api/';
         //IMPORT USERS
-        $usersData = json_decode(file_get_contents('https://geohub.webmapp.it/api/export/editors'), true);
+        $usersData = json_decode(file_get_contents($apiUrl . 'export/editors'), true);
         $this->importUsers($usersData);
 
-        $tracksData = json_decode(file_get_contents('https://geohub.webmapp.it/api/export/tracks'), true);
+        //IMPORT TRACKS
+
+        if (empty($this->option('customer_email'))) {
+            $tracksData = json_decode(file_get_contents($apiUrl . 'export/tracks/'), true);
+        } else {
+            $this->info("Finding selected Users tracks");
+            $options = $this->option('customer_email');
+
+            $tracksData = json_decode(file_get_contents($apiUrl . 'export/tracks/' . $options[0]), true);
+            if (empty($tracksData)) {
+                $this->info("No tracks found for the provided customers email");
+            } else {
+                $count = count($tracksData);
+                $this->info(
+                    "Found $count tracks for the provided customers email"
+                );
+            }
+        }
         $this->importTracks($tracksData);
     }
 
@@ -49,63 +68,27 @@ class GeohubImport extends Command
                 'name' => $element['name'],
                 'password' => $element['geopass'],
                 'role' => UserRole::Editor,
-
-
             ]);
         }
     }
 
     private function importTracks($data)
     {
-        //checks if the user provided an option input
-        if (!empty($this->option('customer_email'))) {
-            // transform input into array
-            $customerEmails = explode(',', implode(',', $this->option('customer_email')));
-            $this->info("Finding selected Users tracks");
-
-            // Filter tracks based on inputs
-            foreach ($customerEmails as $customerEmail) {
-                $this->info("Checking tracks for $customerEmail");
-                $requestedTracks = json_decode(file_get_contents('https://geohub.webmapp.it/api/export/tracks/' . $customerEmail), true);
-                if (empty($requestedTracks)) {
-                    $this->info("No tracks found for {$customerEmail}");
-                } else {
-                    $this->info("start importing " . count($requestedTracks) . " tracks for {$customerEmail}");
-                    foreach ($requestedTracks as $key => $requestedTrack) {
-                        $trackProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . $key), true);
-                        EcTrack::updateOrCreate([
-                            'geohub_id' => $trackProps['properties']['id']
-                        ], [
-                            'name' => $trackProps['properties']['name'],
-                            'description' => $trackProps['properties']['description'],
-                            'excerpt' => $trackProps['properties']['excerpt'],
-                            'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
-                        ]);
-                        $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
-                    }
-                }
-            }
-        } else {
-
-            // If no customer email is provided, all tracks will be imported
-            $tracks = count($data);
-            $counter = 1;
-            foreach ($data as $key => $element) {
-                $this->info("Importing track $counter / $tracks");
-                $counter++;
-
-                $trackProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . $key), true);
-
-                EcTrack::updateOrCreate([
-                    'geohub_id' => $trackProps['properties']['id']
-                ], [
-                    'name' => $trackProps['properties']['name'],
-                    'description' => $trackProps['properties']['description'],
-                    'excerpt' => $trackProps['properties']['excerpt'],
-                    'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
-                ]);
-                $this->info('everything imported correctly');
-            }
+        $this->info("start importing " . count($data) . " tracks");
+        foreach ($data as $key => $track) {
+            $trackProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . "$key"), true);
+            $geojson_content = json_encode($trackProps['geometry']);
+            EcTrack::updateOrCreate([
+                'geohub_id' => $trackProps['properties']['id']
+            ], [
+                'name' => $trackProps['properties']['name'],
+                'description' => $trackProps['properties']['description'],
+                'geometry' => DB::select("SELECT ST_AsText(ST_LineMerge(ST_GeomFromGeoJSON('" . $geojson_content . "'))) As wkt")[0]->wkt,
+                'excerpt' => $trackProps['properties']['excerpt'],
+                'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
+            ]);
+            $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
+        } {
         }
     }
 }
