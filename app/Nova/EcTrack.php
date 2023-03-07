@@ -5,6 +5,7 @@ namespace App\Nova;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\DateTime;
 use App\Nova\Metrics\TracksMetric;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -68,16 +69,19 @@ class EcTrack extends Resource
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
                 Text::make(__('description'), 'description')->hideFromIndex(),
+                Text::make(__('excerpt'), 'excerpt')->hideFromIndex()
             ]),
-
             $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
-
+            DateTime::make(__('Created At'), 'created_at')->sortable(),
+            DateTime::make(__('Updated At'), 'updated_at')->sortable(),
+            Text::make('Geohub ID', 'geohub_id')->onlyOnDetail(),
             MapMultiLinestring::make('geometry')->withMeta([
                 'center' => ["43", "10"],
                 'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
                 'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
                 'defaultZoom' => 10
             ])->hideFromIndex(),
+
 
         ];
     }
