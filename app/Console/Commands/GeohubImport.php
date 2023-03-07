@@ -31,9 +31,14 @@ class GeohubImport extends Command
     public function handle(): void
     {
         $apiUrl = 'https://geohub.webmapp.it/api/';
-        //IMPORT USERS
-        $usersData = json_decode(file_get_contents($apiUrl . 'export/editors'), true);
-        $this->importUsers($usersData);
+
+        //IMPORT ADMIN USERs
+        $adminUsersData = json_decode(file_get_contents($apiUrl . 'export/admins'), true);
+        $this->importUsers($adminUsersData, UserRole::Admin);
+
+        //IMPORT EDITOR USERS
+        $editorUsersData = json_decode(file_get_contents($apiUrl . 'export/editors'), true);
+        $this->importUsers($editorUsersData, UserRole::Editor);
 
         //IMPORT TRACKS
 
@@ -56,7 +61,8 @@ class GeohubImport extends Command
         $this->importTracks($tracksData);
     }
 
-    private function importUsers($data)
+
+    private function importUsers($data, UserRole $role)
     {
         $this->info('Importing User');
         foreach ($data as $element) {
@@ -67,7 +73,7 @@ class GeohubImport extends Command
             ], [
                 'name' => $element['name'],
                 'password' => $element['geopass'],
-                'role' => UserRole::Editor,
+                'role' => $role
             ]);
         }
     }
