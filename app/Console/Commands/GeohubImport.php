@@ -83,7 +83,7 @@ class GeohubImport extends Command
             ], [
                 'name' => $trackProps['properties']['name'],
                 'description' => $trackProps['properties']['description'],
-                'geometry' => DB::select("SELECT ST_AsText(ST_LineMerge(ST_GeomFromGeoJSON('" . $geojson_content . "'))) As wkt")[0]->wkt,
+                'geometry' => DB::select("SELECT ST_AsText(ST_Force2D(ST_LineMerge(ST_GeomFromGeoJSON('" . $geojson_content . "')))) As wkt")[0]->wkt,
                 'excerpt' => $trackProps['properties']['excerpt'],
                 'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
             ]);

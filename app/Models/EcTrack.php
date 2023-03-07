@@ -29,7 +29,9 @@ class EcTrack extends Model
         'user_id',
         'description',
         'excerpt',
-        'geohub_id'
+        'geohub_id',
+        'geometry'
+
     ];
 
     // Relationship with user
