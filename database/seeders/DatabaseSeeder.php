@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             EcTrackSeeder::class,
             EcPoiSeeder::class,
+            TaxonomyThemeSeeder::class
         ]);
     }
 }
