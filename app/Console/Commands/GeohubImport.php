@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use App\Enums\UserRole;
 use App\Models\EcTrack;
+use App\Models\TaxonomyTheme;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Hashing\BcryptHasher;
@@ -34,6 +35,10 @@ class GeohubImport extends Command
         //IMPORT USERS
         $usersData = json_decode(file_get_contents($apiUrl . 'export/editors'), true);
         $this->importUsers($usersData);
+
+        //IMPORT TAXONOMY
+        $taxonomyThemesData = json_decode(file_get_contents($apiUrl . 'export/taxonomy/themes'), true);
+        $this->importTaxonomyThemes($taxonomyThemesData);
 
         //IMPORT TRACKS
 
@@ -89,6 +94,23 @@ class GeohubImport extends Command
             ]);
             $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
         } {
+        }
+    }
+
+    private function importTaxonomyThemes($data)
+    {
+        $this->info('Importing Taxonomy Themes');
+        foreach ($data as $element) {
+            $this->info("Creating taxonomy theme {$element['name']['it']}");
+            $name = $element['name']['it'] ?? '';
+            TaxonomyTheme::updateOrCreate(
+                [
+                    'identifier' => $element['identifier']
+                ],
+                [
+                    'name' => $name
+                ]
+            );
         }
     }
 }
