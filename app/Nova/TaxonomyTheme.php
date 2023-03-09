@@ -4,6 +4,7 @@ namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -42,7 +43,9 @@ class TaxonomyTheme extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name', 'name'),
+            NovaTabTranslatable::make([
+                Text::make(__('Name'), 'name'),
+            ]),
             Text::make('Identifier', 'identifier')
         ];
     }

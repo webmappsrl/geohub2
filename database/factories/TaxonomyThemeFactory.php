@@ -17,7 +17,13 @@ class TaxonomyThemeFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => 'Test theme',
+            'name' => [
+                'it' => $this->faker->name(),
+                'en' => $this->faker->name(),
+                'de' => $this->faker->name(),
+                'fr' => $this->faker->name(),
+                'es' => $this->faker->name(),
+            ],
             'identifier' => $this->faker->unique()->word(),
         ];
     }
