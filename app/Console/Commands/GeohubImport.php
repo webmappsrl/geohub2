@@ -63,7 +63,7 @@ class GeohubImport extends Command
                 );
             }
         }
-        // $this->importTracks($tracksData);
+        $this->importTracks($tracksData);
 
         //IMPORT ECPOIS
         if (empty($this->option('customer_email'))) {
