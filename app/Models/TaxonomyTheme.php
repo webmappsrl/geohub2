@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\EcPoi;
+use App\Models\EcTrack;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class TaxonomyTheme extends Model
@@ -17,4 +19,14 @@ class TaxonomyTheme extends Model
         'name',
         'identifier'
     ];
+
+    public function ecTracks()
+    {
+        return $this->morphedByMany(EcTrack::class, 'themeable');
+    }
+
+    public function ecPois()
+    {
+        return $this->morphedByMany(EcPoi::class, 'themeable');
+    }
 }
