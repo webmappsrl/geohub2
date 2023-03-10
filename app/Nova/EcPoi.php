@@ -18,6 +18,7 @@ use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Textarea;
 use Davidpiesse\NovaToggle\Toggle;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\MorphToMany;
 use Chaseconey\ExternalImage\ExternalImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
@@ -81,7 +82,6 @@ class EcPoi extends Resource
     {
 
         return [
-
             ID::make()->sortable()->onlyOnDetail(),
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
@@ -94,6 +94,7 @@ class EcPoi extends Resource
             Text::make('API', function () {
                 return '<a href="https://geohub.webmapp.it/api/ec/poi/' . $this->id . '" target="_blank">[x]</a>';
             })->asHtml(),
+
         ];
     }
 
@@ -114,8 +115,10 @@ class EcPoi extends Resource
                     'Data' => [
                         Heading::make($this->getData())->asHtml(),
                     ],
+
                 ]
-            ))->withToolbar()
+            ))->withToolbar(),
+            MorphToMany::make('Taxonomy Themes', 'taxonomyThemes'),
         ];
     }
 
@@ -147,6 +150,8 @@ class EcPoi extends Resource
                     'Accessibility' => $this->accessibilityTab(),
                     'Reachability' => $this->reachabilityTab(),
                 ],
+
+
                 //!to fix
                 //! new Panel('Map / Geographical info', [
                 // !    WmEmbedmapsField::make(__('Map'), 'geometry', function () use ($geojson) {
@@ -155,7 +160,7 @@ class EcPoi extends Resource
                 // !        ];
                 //!    }),
                 //! ]),
-            ))
+            )), MorphToMany::make('Taxonomy Themes', 'taxonomyThemes')
 
         ];
     }
@@ -234,6 +239,7 @@ class EcPoi extends Resource
                 //! NovaTinyMCE not working, used Textarea
                 Textarea::make(__('Description'), 'description'),
             ])->onlyOnDetail(),
+
         ];
     }
     private function mediaTab()

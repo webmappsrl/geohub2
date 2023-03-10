@@ -45,7 +45,7 @@ class TaxonomyTheme extends Resource
             ID::make()->sortable(),
             NovaTabTranslatable::make([
                 Text::make(__('Name'), 'name'),
-            ]),
+            ])->setTitle(__('Name')),
             Text::make('Identifier', 'identifier')
         ];
     }
