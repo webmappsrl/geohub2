@@ -45,7 +45,7 @@ class GeohubImport extends Command
         //IMPORT TAXONOMY
         $taxonomyThemesData = json_decode(file_get_contents($apiUrl . 'export/taxonomy/themes'), true);
         $this->importTaxonomyThemes($taxonomyThemesData);
-        
+
         //IMPORT TRACKS
         if (empty($this->option('customer_email'))) {
             $tracksData = json_decode(file_get_contents($apiUrl . 'export/tracks/'), true);
@@ -112,9 +112,9 @@ class GeohubImport extends Command
                 'geohub_id' => $trackProps['properties']['id']
             ], [
                 'name' => $trackProps['properties']['name'],
-                'description' => $trackProps['properties']['description'],
+                'description' => $trackProps['properties']['description'] ?? null,
                 'geometry' => DB::select("SELECT ST_AsText(ST_Force2D(ST_LineMerge(ST_GeomFromGeoJSON('" . $geojson_content . "')))) As wkt")[0]->wkt,
-                'excerpt' => $trackProps['properties']['excerpt'],
+                'excerpt' => $trackProps['properties']['excerpt'] ?? null,
                 'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
             ]);
             $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
@@ -133,9 +133,9 @@ class GeohubImport extends Command
                 'geohub_id' => $ecpoiProps['properties']['id']
             ], [
                 'name' => $ecpoiProps['properties']['name'],
-                'description' => $ecpoiProps['properties']['description'],
+                'description' => $ecpoiProps['properties']['description'] ?? null,
                 'geometry' => $geometry_poi,
-                'excerpt' => $ecpoiProps['properties']['excerpt'],
+                'excerpt' => $ecpoiProps['properties']['excerpt'] ?? null,
                 'user_id' => User::where('email', $ecpoiProps['properties']['author_email'])->first()->id
             ]);
             $this->info("Ecpoi {$ecpoiProps["properties"]["name"]["it"]} of {$ecpoiProps["properties"]["author_email"]} imported correctly");
@@ -154,7 +154,7 @@ class GeohubImport extends Command
                     'identifier' => $element['identifier']
                 ],
                 [
-                    'name' => $name
+                    'name' => $name ?? '',
                 ]
             );
         }
