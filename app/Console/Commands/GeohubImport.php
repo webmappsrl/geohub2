@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Models\EcPoi;
 use App\Enums\UserRole;
 use App\Models\EcTrack;
 use App\Models\TaxonomyTheme;
@@ -32,16 +33,20 @@ class GeohubImport extends Command
     public function handle(): void
     {
         $apiUrl = 'https://geohub.webmapp.it/api/';
-        //IMPORT USERS
-        $usersData = json_decode(file_get_contents($apiUrl . 'export/editors'), true);
-        $this->importUsers($usersData);
+
+        //IMPORT ADMIN USERs
+        $adminUsersData = json_decode(file_get_contents($apiUrl . 'export/admins'), true);
+        $this->importUsers($adminUsersData, UserRole::Admin);
+
+        //IMPORT EDITOR USERS
+        $editorUsersData = json_decode(file_get_contents($apiUrl . 'export/editors'), true);
+        $this->importUsers($editorUsersData, UserRole::Editor);
 
         //IMPORT TAXONOMY
         $taxonomyThemesData = json_decode(file_get_contents($apiUrl . 'export/taxonomy/themes'), true);
         $this->importTaxonomyThemes($taxonomyThemesData);
-
+        
         //IMPORT TRACKS
-
         if (empty($this->option('customer_email'))) {
             $tracksData = json_decode(file_get_contents($apiUrl . 'export/tracks/'), true);
         } else {
@@ -59,11 +64,31 @@ class GeohubImport extends Command
             }
         }
         $this->importTracks($tracksData);
+
+        //IMPORT ECPOIS
+        if (empty($this->option('customer_email'))) {
+            $ecPoisData = json_decode(file_get_contents($apiUrl . 'export/pois/'), true);
+        } else {
+            $this->info("Finding selected Users ecpois");
+            $options = $this->option('customer_email');
+
+            $ecPoisData = json_decode(file_get_contents($apiUrl . 'export/pois/' . $options[0]), true);
+            if (empty($ecPoisData)) {
+                $this->info("No ecpois found for the provided customers email");
+            } else {
+                $count = count($ecPoisData);
+                $this->info(
+                    "Found $count ecpois for the provided customers email"
+                );
+            }
+        }
+        $this->importPois($ecPoisData);
     }
 
-    private function importUsers($data)
+
+    private function importUsers($data, UserRole $role)
     {
-        $this->info('Importing User');
+        $this->info('Importing Users');
         foreach ($data as $element) {
             $this->info("Creating user {$element['name']}");
 
@@ -72,7 +97,7 @@ class GeohubImport extends Command
             ], [
                 'name' => $element['name'],
                 'password' => $element['geopass'],
-                'role' => UserRole::Editor,
+                'role' => $role
             ]);
         }
     }
@@ -93,6 +118,27 @@ class GeohubImport extends Command
                 'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
             ]);
             $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
+        } {
+        }
+    }
+
+    private function importPois($data)
+    {
+        $this->info("start importing " . count($data) . " ecpois");
+        foreach ($data as $key => $ecpoi) {
+            $ecpoiProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/poi/' . "$key"), true);
+            $geometry = '{"type":"Point","coordinates":[' . $ecpoiProps['geometry']['coordinates'][0] . ',' . $ecpoiProps['geometry']['coordinates'][1] . ']}';
+            $geometry_poi = DB::select("SELECT ST_AsText(ST_GeomFromGeoJSON('$geometry')) As wkt")[0]->wkt;
+            EcPoi::updateOrCreate([
+                'geohub_id' => $ecpoiProps['properties']['id']
+            ], [
+                'name' => $ecpoiProps['properties']['name'],
+                'description' => $ecpoiProps['properties']['description'],
+                'geometry' => $geometry_poi,
+                'excerpt' => $ecpoiProps['properties']['excerpt'],
+                'user_id' => User::where('email', $ecpoiProps['properties']['author_email'])->first()->id
+            ]);
+            $this->info("Ecpoi {$ecpoiProps["properties"]["name"]["it"]} of {$ecpoiProps["properties"]["author_email"]} imported correctly");
         } {
         }
     }
