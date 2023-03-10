@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Enums\UserRole;
 use App\Models\User;
+use App\Enums\UserRole;
+use App\Models\TaxonomyTheme;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Translatable\HasTranslations;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EcTrack extends Model
 {
@@ -39,5 +40,10 @@ class EcTrack extends Model
     public function user()
     {
         return $this->belongsTo(User::class)->where('role', UserRole::Editor);
+    }
+
+    public function taxonomyThemes()
+    {
+        return $this->morphToMany(TaxonomyTheme::class, 'themeable');
     }
 }
