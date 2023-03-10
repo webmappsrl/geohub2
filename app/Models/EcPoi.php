@@ -12,7 +12,7 @@ class EcPoi extends Model
 {
     use HasFactory, HasTranslations;
 
-    public $translatable = ['name', 'description'];
+    public $translatable = ['name', 'description', 'excerpt'];
 
     protected static function booted()
     {
@@ -26,6 +26,11 @@ class EcPoi extends Model
     protected $fillable = [
         'name',
         'user_id',
+        'description',
+        'excerpt',
+        'geohub_id',
+        'geometry',
+        'out_source_feature_id'
     ];
 
     public function user()
