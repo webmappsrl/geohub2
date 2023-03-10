@@ -63,7 +63,7 @@ class GeohubImport extends Command
                 );
             }
         }
-        $this->importTracks($tracksData);
+        // $this->importTracks($tracksData);
 
         //IMPORT ECPOIS
         if (empty($this->option('customer_email'))) {
@@ -141,6 +141,11 @@ class GeohubImport extends Command
                 'excerpt' => $ecpoiProps['properties']['excerpt'] ?? null,
                 'user_id' => User::where('email', $ecpoiProps['properties']['author_email'])->first()->id
             ]);
+
+            //update the taxonomyThemes relationship for the ecpoi
+            $taxonomyThemeIds = $ecpoiProps['properties']['taxonomy']['theme'] ?? [];
+            $ecpoi = EcPoi::where('geohub_id', $ecpoiProps['properties']['id'])->first();
+            $ecpoi->taxonomyThemes()->attach($taxonomyThemeIds);
             $this->info("Ecpoi {$ecpoiProps["properties"]["name"]["it"]} of {$ecpoiProps["properties"]["author_email"]} imported correctly");
         } {
         }
