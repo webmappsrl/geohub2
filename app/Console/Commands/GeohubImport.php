@@ -115,10 +115,13 @@ class GeohubImport extends Command
                 'description' => $trackProps['properties']['description'] ?? null,
                 'geometry' => DB::select("SELECT ST_AsText(ST_Force2D(ST_LineMerge(ST_GeomFromGeoJSON('" . $geojson_content . "')))) As wkt")[0]->wkt,
                 'excerpt' => $trackProps['properties']['excerpt'] ?? null,
-                'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id
+                'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id,
             ]);
+            // update the taxonomyThemes relationship for the track
+            $taxonomyThemeIds = $trackProps['properties']['taxonomy']['theme'] ?? [];
+            $track = EcTrack::where('geohub_id', $trackProps['properties']['id'])->first();
+            $track->taxonomyThemes()->attach($taxonomyThemeIds);
             $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
-        } {
         }
     }
 
