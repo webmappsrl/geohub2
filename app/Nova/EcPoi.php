@@ -82,15 +82,15 @@ class EcPoi extends Resource
     {
 
         return [
-            ID::make()->sortable()->onlyOnDetail(),
+            ID::make()->sortable(),
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
                 Text::make(__('description'), 'description')->hideFromIndex(),
                 Text::make(__('excerpt'), 'excerpt')->hideFromIndex(),
             ])->setTitle('Name'),
+            BelongsTo::make('User'),
             DateTime::make(__('Created At'), 'created_at')->sortable(),
             DateTime::make(__('Updated At'), 'updated_at')->sortable(),
-            BelongsTo::make('User'),
             Text::make('API', function () {
                 return '<a href="https://geohub.webmapp.it/api/ec/poi/' . $this->id . '" target="_blank">[x]</a>';
             })->asHtml(),

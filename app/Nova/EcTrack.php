@@ -71,7 +71,7 @@ class EcTrack extends Resource
                 Text::make(__('name'), 'name'),
                 Text::make(__('description'), 'description')->hideFromIndex(),
                 Text::make(__('excerpt'), 'excerpt')->hideFromIndex()
-            ]),
+            ])->setTitle(__('Name')),
             $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
             DateTime::make(__('Created At'), 'created_at')->sortable(),
             DateTime::make(__('Updated At'), 'updated_at')->sortable(),
