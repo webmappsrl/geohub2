@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('taxonomy_themes', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('name')->nullable();
+            $table->string('name');
             $table->string('identifier')->unique();
         });
     }
