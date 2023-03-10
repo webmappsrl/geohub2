@@ -41,6 +41,6 @@ class EcPoi extends Model
 
     public function taxonomyThemes()
     {
-        return $this->morphToMany(TaxonomyTheme::class, 'themeable');
+        return $this->morphToMany(TaxonomyTheme::class, 'themeable', 'taxonomy_themeables');
     }
 }

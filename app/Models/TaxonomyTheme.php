@@ -22,11 +22,11 @@ class TaxonomyTheme extends Model
 
     public function ecTracks()
     {
-        return $this->morphedByMany(EcTrack::class, 'themeable');
+        return $this->morphedByMany(EcTrack::class, 'themeable', 'taxonomy_themeables');
     }
 
     public function ecPois()
     {
-        return $this->morphedByMany(EcPoi::class, 'themeable');
+        return $this->morphedByMany(EcPoi::class, 'themeable', 'taxonomy_themeables');
     }
 }

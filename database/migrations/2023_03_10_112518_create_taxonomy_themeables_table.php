@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('taxonomy_themeable', function (Blueprint $table) {
+        Schema::create('taxonomy_themeables', function (Blueprint $table) {
             $table->foreignId('taxonomy_theme_id')->constrained();
             $table->morphs('themeable'); // <-- morphs() is a shortcut for themeable_id and themeable_type
         });
@@ -22,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taxonomy_themeable');
+        Schema::dropIfExists('taxonomy_themeables');
     }
 };

@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\DateTime;
 use App\Nova\Metrics\TracksMetric;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Wm\MapMultiLinestring\MapMultiLinestring;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
@@ -81,6 +82,7 @@ class EcTrack extends Resource
                 'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
                 'defaultZoom' => 10
             ])->hideFromIndex(),
+            MorphToMany::make('Taxonomy Themes', 'taxonomyThemes'),
 
 
         ];
