@@ -4,6 +4,11 @@ on:
   push:
     branches: 
       - develop
+  pull_request:
+    branches:
+      - develop 
+    paths:
+      - ".github/workflows/dev_deploy.yaml"
 
 jobs:
   laravel-tests:
