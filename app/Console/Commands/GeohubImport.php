@@ -118,10 +118,13 @@ class GeohubImport extends Command
                 'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id,
             ]);
             // update the taxonomyThemes relationship for the track
-            $taxonomyThemeIds = $trackProps['properties']['taxonomy']['theme'] ?? [];
+            $themeIds = $trackProps['properties']['taxonomy']['theme'];
             $track = EcTrack::where('geohub_id', $trackProps['properties']['id'])->first();
-            $track->taxonomyThemes()->attach($taxonomyThemeIds);
-            $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
+            foreach ($themeIds as $themeId) {
+                $theme = json_decode(file_get_contents("https://geohub.webmapp.it/api/taxonomy/theme/$themeId"), true);
+                $track->taxonomyThemes()->attach(TaxonomyTheme::where('identifier', $theme['identifier'])->first()->id);
+                $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
+            }
         }
     }
 
@@ -143,10 +146,13 @@ class GeohubImport extends Command
             ]);
 
             //update the taxonomyThemes relationship for the ecpoi
-            $taxonomyThemeIds = $ecpoiProps['properties']['taxonomy']['theme'] ?? [];
+            $themeIds = $ecpoiProps['properties']['taxonomy']['theme'];
             $ecpoi = EcPoi::where('geohub_id', $ecpoiProps['properties']['id'])->first();
-            $ecpoi->taxonomyThemes()->attach($taxonomyThemeIds);
-            $this->info("Ecpoi {$ecpoiProps["properties"]["name"]["it"]} of {$ecpoiProps["properties"]["author_email"]} imported correctly");
+            foreach ($themeIds as $themeId) {
+                $theme = json_decode(file_get_contents("https://geohub.webmapp.it/api/taxonomy/theme/$themeId"), true);
+                $ecpoi->taxonomyThemes()->attach(TaxonomyTheme::where('identifier', $theme['identifier'])->first()->id);
+                $this->info("Ecpoi {$ecpoiProps["properties"]["name"]["it"]} of {$ecpoiProps["properties"]["author_email"]} imported correctly");
+            }
         } {
         }
     }
