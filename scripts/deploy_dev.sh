@@ -8,7 +8,7 @@ echo "Deployment started ..."
 (php artisan down) || true
 
 # Pull the latest version of the app
-git pull origin develop
+# git pull origin develop
 
 # Install composer dependencies
 composer install  --no-interaction --prefer-dist --optimize-autoloader
