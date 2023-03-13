@@ -7,7 +7,6 @@ on:
 
 jobs:
   laravel-tests:
-
     runs-on: ubuntu-latest
     - uses: huaxk/postgis-action@v1
       with:
