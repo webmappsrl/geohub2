@@ -272,7 +272,7 @@ class EcPoi extends Resource
                 'minZoom' => 7,
                 'maxZoom' => 16,
                 'defaultZoom' => 12
-            ])->onlyOnDetail(),
+            ])->hideFromIndex(),
         ];
     }
 
