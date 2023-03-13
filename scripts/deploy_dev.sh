@@ -15,18 +15,8 @@ composer install  --no-interaction --prefer-dist --optimize-autoloader
 # php artisan nova:install
 
 # Run database migrations
-php artisan migrate:fresh --force --seed
+php artisan migrate:fresh --seed
 
-# Clear caches
-php artisan cache:clear
-
-# Clear and cache routes
-php artisan route:clear
-php artisan route:cache
-
-# Clear and cache config
-php artisan config:clear
-php artisan config:cache
 
 # Clear the old cache
 php artisan clear-compiled
@@ -36,7 +26,7 @@ php artisan optimize
 
 # Compile npm assets
 # npm run prod
-cd vendor/laravel/nova && npm install
+# cd vendor/laravel/nova && npm install
 # Exit maintenance mode
 php artisan up
 
