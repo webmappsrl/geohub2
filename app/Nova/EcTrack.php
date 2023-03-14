@@ -28,7 +28,7 @@ class EcTrack extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -82,7 +82,7 @@ class EcTrack extends Resource
                 'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
                 'defaultZoom' => 10
             ])->hideFromIndex(),
-            MorphToMany::make('Taxonomy Themes', 'taxonomyThemes'),
+            MorphToMany::make('Taxonomy Themes', 'taxonomyThemes')->searchable(),
 
 
         ];

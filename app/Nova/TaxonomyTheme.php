@@ -48,8 +48,8 @@ class TaxonomyTheme extends Resource
                 Text::make(__('Name'), 'name'),
             ])->setTitle(__('Name')),
             Text::make('Identifier', 'identifier'),
-            MorphToMany::make('EcTracks', 'ecTracks'),
-            MorphToMany::make('EcPois', 'ecPois'),
+            MorphToMany::make('EcTracks', 'ecTracks')->searchable(),
+            MorphToMany::make('EcPois', 'ecPois')->searchable(),
         ];
     }
 
