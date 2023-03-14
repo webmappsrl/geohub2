@@ -131,6 +131,14 @@ class EcPoi extends Resource
                             Textarea::make(__('Description'), 'description'),
                         ]),
                         BelongsTo::make('User'),
+                        MapPoint::make(__('Map'), 'geometry')->withMeta([
+                            'center' => ["51", "4"],
+                            'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
+                            'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
+                            'minZoom' => 7,
+                            'maxZoom' => 16,
+                            'defaultZoom' => 12
+                        ])->hideFromIndex(),
                     ],
                     'Media' => [
                         File::make(__('Audio'), 'audio')->store(function (Request $request, $model) {
@@ -231,7 +239,14 @@ class EcPoi extends Resource
                 //! NovaTinyMCE not working, used Textarea
                 Textarea::make(__('Description'), 'description'),
             ])->onlyOnDetail(),
-
+            MapPoint::make(__('Map'), 'geometry')->withMeta([
+                'center' => ["51", "4"],
+                'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
+                'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
+                'minZoom' => 7,
+                'maxZoom' => 16,
+                'defaultZoom' => 12
+            ])->hideFromIndex(),
         ];
     }
     private function mediaTab()
@@ -257,20 +272,6 @@ class EcPoi extends Resource
             //!    }
             //!     return $url;
             //!})->withMeta(['width' => 400])->onlyOnDetail(),
-        ];
-    }
-
-    private function mapTab()
-    {
-        return  [
-            MapPoint::make(__('Map'), 'geometry')->withMeta([
-                'center' => ["51", "4"],
-                'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
-                'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
-                'minZoom' => 7,
-                'maxZoom' => 16,
-                'defaultZoom' => 12
-            ])->onlyOnDetail(),
         ];
     }
 
