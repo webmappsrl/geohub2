@@ -5,6 +5,7 @@ namespace App\Nova;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -45,8 +46,10 @@ class TaxonomyTheme extends Resource
             ID::make()->sortable(),
             NovaTabTranslatable::make([
                 Text::make(__('Name'), 'name'),
-            ]),
-            Text::make('Identifier', 'identifier')
+            ])->setTitle(__('Name')),
+            Text::make('Identifier', 'identifier'),
+            MorphToMany::make('EcTracks', 'ecTracks'),
+            MorphToMany::make('EcPois', 'ecPois'),
         ];
     }
 

@@ -8,6 +8,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\DateTime;
 use App\Nova\Metrics\TracksMetric;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Wm\MapMultiLinestring\MapMultiLinestring;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
@@ -70,7 +71,7 @@ class EcTrack extends Resource
                 Text::make(__('name'), 'name'),
                 Text::make(__('description'), 'description')->hideFromIndex(),
                 Text::make(__('excerpt'), 'excerpt')->hideFromIndex()
-            ]),
+            ])->setTitle(__('Name')),
             $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
             DateTime::make(__('Created At'), 'created_at')->sortable(),
             DateTime::make(__('Updated At'), 'updated_at')->sortable(),
@@ -81,6 +82,7 @@ class EcTrack extends Resource
                 'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
                 'defaultZoom' => 10
             ])->hideFromIndex(),
+            MorphToMany::make('Taxonomy Themes', 'taxonomyThemes'),
 
 
         ];

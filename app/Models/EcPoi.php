@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\TaxonomyTheme;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
@@ -36,5 +37,10 @@ class EcPoi extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function taxonomyThemes()
+    {
+        return $this->morphToMany(TaxonomyTheme::class, 'themeable', 'taxonomy_themeables');
     }
 }
