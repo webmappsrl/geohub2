@@ -239,14 +239,6 @@ class EcPoi extends Resource
                 //! NovaTinyMCE not working, used Textarea
                 Textarea::make(__('Description'), 'description'),
             ])->onlyOnDetail(),
-            MapPoint::make(__('Map'), 'geometry')->withMeta([
-                'center' => ["51", "4"],
-                'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
-                'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
-                'minZoom' => 7,
-                'maxZoom' => 16,
-                'defaultZoom' => 12
-            ])->hideFromIndex(),
         ];
     }
     private function mediaTab()
