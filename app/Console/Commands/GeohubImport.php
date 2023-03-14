@@ -161,14 +161,14 @@ class GeohubImport extends Command
     {
         $this->info('Importing Taxonomy Themes');
         foreach ($data as $element) {
-            $this->info("Creating taxonomy theme {$element['name']['it']}");
-            $name = $element['name']['it'] ?? '';
+            $name = $element['name']['it'] ? $element['name']['it'] : $element['name']['en'];
+            $this->info("Creating taxonomy theme {$name}");
             TaxonomyTheme::updateOrCreate(
                 [
                     'identifier' => $element['identifier']
                 ],
                 [
-                    'name' => $name ?? '',
+                    'name' => $element['name'] ?? null,
                 ]
             );
         }
