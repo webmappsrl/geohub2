@@ -43,4 +43,4 @@ jobs:
         username: ${{ secrets.USERNAME }}
         port: ${{ secrets.PORT }}
         key: ${{ secrets.SSHKEY }}
-        run: "cd /root/html/geohub && git pull && docker exec -it php81_geohub bash scripts/deploy_dev.sh"
+        script: "cd /root/html/geohub && git pull && docker exec -it php81_geohub bash scripts/deploy_dev.sh"
