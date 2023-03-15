@@ -13,9 +13,10 @@ composer install  --no-interaction --prefer-dist --optimize-autoloader
 # php artisan nova:install
 
 # TODO
-php artisan db:wipe
-php artisan db:restore
-php artisan migrate
+# php artisan db:wipe
+# php artisan db:restore
+php artisan migrate:fresh
+php artisan geohub:import --customer_email=portable@webmapp.it
 
 # Clear the old cache
 php artisan clear-compiled
