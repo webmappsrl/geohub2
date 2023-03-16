@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "56881d1e7e8ecfd34848df4b7d2d1459",
+    "content-hash": "08dcd6023d73167f9f5217c3f1cac16f",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7247,16 +7247,16 @@
         },
         {
             "name": "wm/map-point",
-            "version": "v0.0.8",
+            "version": "v0.0.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmappsrl/map-point.git",
-                "reference": "30e994ffda6350a9256cc5ab6b13f6945f68b9c0"
+                "reference": "eeceb44f2088955a33d28da77de04b075fd1adc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmappsrl/map-point/zipball/30e994ffda6350a9256cc5ab6b13f6945f68b9c0",
-                "reference": "30e994ffda6350a9256cc5ab6b13f6945f68b9c0",
+                "url": "https://api.github.com/repos/webmappsrl/map-point/zipball/eeceb44f2088955a33d28da77de04b075fd1adc0",
+                "reference": "eeceb44f2088955a33d28da77de04b075fd1adc0",
                 "shasum": ""
             },
             "require": {
@@ -7286,9 +7286,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmappsrl/map-point/issues",
-                "source": "https://github.com/webmappsrl/map-point/tree/v0.0.8"
+                "source": "https://github.com/webmappsrl/map-point/tree/v0.0.9"
             },
-            "time": "2023-03-15T14:29:13+00:00"
+            "time": "2023-03-16T14:26:41+00:00"
         },
         {
             "name": "wm/wm-internal",

@@ -23,7 +23,7 @@
         "spatie/db-dumper": "^3.3",
         "spatie/laravel-translatable": "^6.1",
         "wm/map-multi-linestring": "^0.0.4",
-        "wm/map-point": "0.0.8",
+        "wm/map-point": "0.0.9",
         "wm/wm-internal": "*",
         "wm/wm-package": "*"
     },
