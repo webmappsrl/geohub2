@@ -21,7 +21,7 @@ use Chaseconey\ExternalImage\ExternalImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
-
+use Laravel\Nova\Fields\Markdown;
 
 class EcPoi extends Resource
 {
@@ -78,7 +78,7 @@ class EcPoi extends Resource
             ID::make()->sortable(),
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
-                Text::make(__('description'), 'description')->hideFromIndex(),
+                Markdown::make(__('description'), 'description')->hideFromIndex(),
                 Text::make(__('excerpt'), 'excerpt')->hideFromIndex(),
             ])->setTitle('Name'),
             BelongsTo::make('User'),
