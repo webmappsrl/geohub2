@@ -146,12 +146,14 @@ class GeohubImport extends Command
             ]);
 
             //update the taxonomyThemes relationship for the ecpoi
-            $themeIds = $ecpoiProps['properties']['taxonomy']['theme'];
-            $ecpoi = EcPoi::where('geohub_id', $ecpoiProps['properties']['id'])->first();
-            foreach ($themeIds as $themeId) {
-                $theme = json_decode(file_get_contents("https://geohub.webmapp.it/api/taxonomy/theme/$themeId"), true);
-                $ecpoi->taxonomyThemes()->attach(TaxonomyTheme::where('identifier', $theme['identifier'])->first()->id);
-                $this->info("Ecpoi {$ecpoiProps["properties"]["name"]["it"]} of {$ecpoiProps["properties"]["author_email"]} imported correctly");
+            $themeIds = $ecpoiProps['properties']['taxonomy']['theme'] ?? null;
+            if ($themeIds) {
+                $ecpoi = EcPoi::where('geohub_id', $ecpoiProps['properties']['id'])->first();
+                foreach ($themeIds as $themeId) {
+                    $theme = json_decode(file_get_contents("https://geohub.webmapp.it/api/taxonomy/theme/$themeId"), true);
+                    $ecpoi->taxonomyThemes()->attach(TaxonomyTheme::where('identifier', $theme['identifier'])->first()->id);
+                    $this->info("Ecpoi {$ecpoiProps["properties"]["name"]["it"]} of {$ecpoiProps["properties"]["author_email"]} imported correctly");
+                }
             }
         } {
         }
