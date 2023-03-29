@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Filters\ThemeFilter;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
@@ -116,9 +117,9 @@ class EcTrack extends Resource
             (new NovaSearchableBelongsToFilter('User'))
                 ->fieldAttribute('user')
                 ->filterBy('user_id'),
+            //search by taxonomy theme
+            new ThemeFilter
         ];
-
-        return [];
     }
 
     /**

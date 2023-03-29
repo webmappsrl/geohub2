@@ -10,7 +10,9 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
+use App\Nova\Filters\ThemeFilter;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Fields\Textarea;
 use Davidpiesse\NovaToggle\Toggle;
 use Laravel\Nova\Fields\BelongsTo;
@@ -18,7 +20,6 @@ use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
-use Laravel\Nova\Fields\Markdown;
 
 class EcPoi extends Resource
 {
@@ -194,6 +195,8 @@ class EcPoi extends Resource
             (new NovaSearchableBelongsToFilter('User'))
                 ->fieldAttribute('user')
                 ->filterBy('user_id'),
+            //search by taxonomy theme
+            new ThemeFilter
         ];
 
         return [];
