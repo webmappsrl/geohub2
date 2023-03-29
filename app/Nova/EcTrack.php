@@ -49,10 +49,14 @@ class EcTrack extends Resource
      */
     public static function indexQuery(NovaRequest $request, $query)
     {
+        //if user is admin, show all tracks
         if ($request->user()->isAdmin()) {
             return $query;
         }
-        return $query->where('user_id', $request->user()->id);
+        //if user is editor, show only his tracks
+        if ($request->user()->isEditor()) {
+            return $query->where('user_id', $request->user()->id);
+        }
     }
 
 

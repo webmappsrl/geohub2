@@ -2,8 +2,6 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Panel;
-use Davidpiesse\Map\Map;
 use Eminiarts\Tabs\Tabs;
 use Wm\MapPoint\MapPoint;
 use Laravel\Nova\Fields\ID;
@@ -17,7 +15,6 @@ use Laravel\Nova\Fields\Textarea;
 use Davidpiesse\NovaToggle\Toggle;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\MorphToMany;
-use Chaseconey\ExternalImage\ExternalImage;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
@@ -25,7 +22,6 @@ use Laravel\Nova\Fields\Markdown;
 
 class EcPoi extends Resource
 {
-
 
     /**
      * The model the resource corresponds to.
@@ -59,10 +55,14 @@ class EcPoi extends Resource
      */
     public static function indexQuery(NovaRequest $request, $query)
     {
+        //if user is admin can see all
         if ($request->user()->isAdmin()) {
             return $query;
         }
-        return $query->where('user_id', $request->user()->id);
+        //if user is editor can only see his own pois
+        if ($request->user()->isEditor()) {
+            return $query->where('user_id', $request->user()->id);
+        }
     }
 
     /**
