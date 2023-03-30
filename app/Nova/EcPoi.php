@@ -17,6 +17,7 @@ use Laravel\Nova\Fields\Textarea;
 use Davidpiesse\NovaToggle\Toggle;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\MorphToMany;
+use Datomatic\NovaMarkdownTui\MarkdownTui;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
@@ -77,11 +78,15 @@ class EcPoi extends Resource
 
         return [
             ID::make()->sortable(),
+
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
-                Markdown::make(__('description'), 'description')->hideFromIndex(),
-                Text::make(__('excerpt'), 'excerpt')->hideFromIndex(),
-            ])->setTitle('Name'),
+                Textarea::make(__('excerpt'), 'excerpt')
+                    ->hideFromIndex()
+                    ->alwaysShow(),
+                MarkdownTui::make(__('description'), 'description')->hideFromIndex(),
+            ])->setTitle(__('Name')),
+
             BelongsTo::make('User'),
             DateTime::make(__('Created At'), 'created_at')->sortable(),
             DateTime::make(__('Updated At'), 'updated_at')->sortable(),
@@ -127,9 +132,7 @@ class EcPoi extends Resource
                         NovaTabTranslatable::make([
                             Text::make(__('Name'), 'name'),
                             Textarea::make(__('Excerpt'), 'excerpt'),
-                            //! not working
-                            //!NovaTinyMCE::make(__('Description'), 'description'),
-                            Textarea::make(__('Description'), 'description'),
+                            MarkdownTui::make(__('Description'), 'description'),
                         ]),
                         BelongsTo::make('User'),
                         MapPoint::make(__('Map'), 'geometry')->withMeta([
@@ -239,8 +242,7 @@ class EcPoi extends Resource
             NovaTabTranslatable::make([
                 Text::make(__('Name'), 'name'),
                 Textarea::make(__('Excerpt'), 'excerpt'),
-                //! NovaTinyMCE not working, used Textarea
-                Textarea::make(__('Description'), 'description'),
+                MarkdownTui::make(__('Description'), 'description'),
             ])->onlyOnDetail(),
         ];
     }

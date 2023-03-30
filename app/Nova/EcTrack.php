@@ -2,19 +2,22 @@
 
 namespace App\Nova;
 
-use App\Nova\Filters\ThemeFilter;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use App\Nova\Actions\editThemes;
+use App\Nova\Filters\ThemeFilter;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Markdown;
 use App\Nova\Metrics\TracksMetric;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\MorphToMany;
+use Datomatic\NovaMarkdownTui\MarkdownTui;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Wm\MapMultiLinestring\MapMultiLinestring;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
-use Laravel\Nova\Fields\Markdown;
+use Laravel\Nova\Fields\Textarea;
 
 class EcTrack extends Resource
 {
@@ -50,11 +53,11 @@ class EcTrack extends Resource
      */
     public static function indexQuery(NovaRequest $request, $query)
     {
-        //if user is admin, show all tracks
+        //if user is admin can see all
         if ($request->user()->isAdmin()) {
             return $query;
         }
-        //if user is editor, show only his tracks
+        //if user is editor can only see his own tracks
         if ($request->user()->isEditor()) {
             return $query->where('user_id', $request->user()->id);
         }
@@ -75,9 +78,14 @@ class EcTrack extends Resource
 
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
-                Markdown::make(__('description'), 'description')->hideFromIndex(),
-                Text::make(__('excerpt'), 'excerpt')->hideFromIndex()
+                Textarea::make(__('excerpt'), 'excerpt')
+                    ->hideFromIndex()
+                    ->alwaysShow(),
+                MarkdownTui::make(__('description'), 'description')
+                    ->hideFromIndex(),
             ])->setTitle(__('Name')),
+
+
             $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
             DateTime::make(__('Created At'), 'created_at')->sortable(),
             DateTime::make(__('Updated At'), 'updated_at')->sortable(),
@@ -89,7 +97,6 @@ class EcTrack extends Resource
                 'defaultZoom' => 10
             ])->hideFromIndex(),
             MorphToMany::make('Taxonomy Themes', 'taxonomyThemes')->searchable(),
-
 
         ];
     }
@@ -113,12 +120,22 @@ class EcTrack extends Resource
      */
     public function filters(NovaRequest $request)
     {
+
         if ($request->user()->isAdmin()) return [
             (new NovaSearchableBelongsToFilter('User'))
                 ->fieldAttribute('user')
                 ->filterBy('user_id'),
-            //search by taxonomy theme
-            new ThemeFilter
+            //! To fix: search by taxonomy theme
+            (new NovaSearchableBelongsToFilter('Taxonomy Theme'))
+                ->fieldAttribute('taxonomy_themes')
+                ->filterBy('taxonomy_themes.identifier')
+        ];
+        return [
+            // search by taxonomy theme
+            (new NovaSearchableBelongsToFilter('Taxonomy Theme'))
+                ->fieldAttribute('taxonomy_themes')
+                ->filterBy('taxonomy_themes.identifier')
+
         ];
     }
 
@@ -141,6 +158,11 @@ class EcTrack extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [];
+        return [
+            (new editThemes)
+                ->confirmText('Update Taxonomy Theme')
+                ->confirmButtonText('Yes, edit the themes')
+                ->cancelButtonText('No, cancel')
+        ];
     }
 }
