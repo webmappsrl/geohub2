@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "14414eb7ec3228d80105abc6bb8ffc15",
+    "content-hash": "e9dd0521732029dacac31f3be6d8ad84",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7202,16 +7202,16 @@
         },
         {
             "name": "wm/map-multi-linestring",
-            "version": "v0.0.6",
+            "version": "v0.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmappsrl/map-multi-linestring.git",
-                "reference": "f6ad9454ea777e991347ad1e01b9e4fdb9085fbf"
+                "reference": "1e1ae2b7ac53005af7115b46772be6c1e5474742"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmappsrl/map-multi-linestring/zipball/f6ad9454ea777e991347ad1e01b9e4fdb9085fbf",
-                "reference": "f6ad9454ea777e991347ad1e01b9e4fdb9085fbf",
+                "url": "https://api.github.com/repos/webmappsrl/map-multi-linestring/zipball/1e1ae2b7ac53005af7115b46772be6c1e5474742",
+                "reference": "1e1ae2b7ac53005af7115b46772be6c1e5474742",
                 "shasum": ""
             },
             "require": {
@@ -7241,9 +7241,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmappsrl/map-multi-linestring/issues",
-                "source": "https://github.com/webmappsrl/map-multi-linestring/tree/v0.0.6"
+                "source": "https://github.com/webmappsrl/map-multi-linestring/tree/v0.0.7"
             },
-            "time": "2023-03-28T08:08:01+00:00"
+            "time": "2023-03-30T11:39:23+00:00"
         },
         {
             "name": "wm/map-point",
