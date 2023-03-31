@@ -94,7 +94,8 @@ class EcTrack extends Resource
                 'center' => ["43", "10"],
                 'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
                 'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
-                'defaultZoom' => 10
+                'defaultZoom' => 10,
+                'graphhopper_api' => 'https://graphhopper.webmapp.it/route'
             ])->hideFromIndex(),
             MorphToMany::make('Taxonomy Themes', 'taxonomyThemes')->searchable(),
 
