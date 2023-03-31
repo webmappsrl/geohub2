@@ -38,9 +38,24 @@ class ThemeFilter extends Filter
      */
     public function options(NovaRequest $request)
     {
-        foreach (TaxonomyTheme::all() as $theme) {
-            $options[$theme->identifier] = $theme->identifier;
+        $options = [];
+        //when the user is in the EcTracks index, the filter show only the themes of the user's related tracks
+        if ($request->resource == 'ec-tracks') {
+            $taxonomyThemes = TaxonomyTheme::whereHas('ecTracks', function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            })->get();
         }
+        //when the user is in the EcPoi index, the filter show only the themes of the user's related pois
+        if ($request->resource == 'ec-pois') {
+            $taxonomyThemes = TaxonomyTheme::whereHas('ecPois', function ($query) use ($request) {
+                $query->where('user_id', $request->user()->id);
+            })->get();
+        }
+
+        foreach ($taxonomyThemes as $taxonomyTheme) {
+            $options[$taxonomyTheme->identifier] = $taxonomyTheme->identifier;
+        }
+
         return $options;
     }
 }

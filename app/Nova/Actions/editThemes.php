@@ -2,13 +2,13 @@
 
 namespace App\Nova\Actions;
 
+use App\Models\TaxonomyTheme;
 use Illuminate\Bus\Queueable;
-use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class editThemes extends Action
@@ -22,6 +22,7 @@ class editThemes extends Action
      */
     public $name = 'Edit Themes';
 
+
     /**
      * Perform the action on the given models.
      *
@@ -32,13 +33,17 @@ class editThemes extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
-            if (isset($fields['name'])) {
-                $model->name = $fields['name'];
+            //attach new taxonomyThemes to the model
+            if (isset($fields['attach'])) {
+                $taxonomyTheme = TaxonomyTheme::where('identifier', $fields['attach'])->first();
+                $model->taxonomyThemes()->attach($taxonomyTheme);
             }
-            if (isset($fields['identifier'])) {
-                $model->identifier = $fields['identifier'];
+
+            //detach taxonomyThemes from the model
+            if (isset($fields['detach'])) {
+                $taxonomyTheme = TaxonomyTheme::where('identifier', $fields['detach'])->first();
+                $model->taxonomyThemes()->detach($taxonomyTheme);
             }
-            $model->save();
         }
     }
 
@@ -51,8 +56,26 @@ class editThemes extends Action
     public function fields(NovaRequest $request)
     {
         return [
-            Text::make('Name'),
-            Text::make('Identifier')->rules('required')
+            //select field to attach taxonomy theme. Generate options from the taxonomy themes not attached to the model 
+            Select::make('Attach')
+                ->options($request->resource == 'ec-tracks' ? TaxonomyTheme::whereHas('ecTracks', function ($query) use ($request) {
+                    $query->where('user_id', $request->user()->id);
+                }, '<', 1)->get()->pluck('identifier', 'identifier') : TaxonomyTheme::whereHas('ecPois', function ($query) use ($request) {
+                    $query->where('user_id', $request->user()->id);
+                }, '<', 1)->get()->pluck('identifier', 'identifier'))
+                ->displayUsingLabels()
+                ->searchable(),
+
+            //select field to detach taxonomy theme. Generate options from the taxonomy themes attached to the model
+            Select::make('Detach')
+                ->options($request->resource == 'ec-tracks' ? TaxonomyTheme::whereHas('ecTracks', function ($query) use ($request) {
+                    $query->where('user_id', $request->user()->id);
+                })->get()->pluck('identifier', 'identifier') : TaxonomyTheme::whereHas('ecPois', function ($query) use ($request) {
+                    $query->where('user_id', $request->user()->id);
+                })->get()->pluck('identifier', 'identifier'))
+                ->displayUsingLabels()
+                ->searchable(),
+
 
 
         ];

@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
+use App\Nova\Actions\editThemes;
 use App\Nova\Filters\ThemeFilter;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\Markdown;
@@ -192,17 +193,20 @@ class EcPoi extends Resource
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
+
     public function filters(NovaRequest $request)
     {
+
+        //if user is admin can filter by user
         if ($request->user()->isAdmin()) return [
             (new NovaSearchableBelongsToFilter('User'))
                 ->fieldAttribute('user')
                 ->filterBy('user_id'),
-            //search by taxonomy theme
-            new ThemeFilter
         ];
-
-        return [];
+        //if user is editor can filter by themes related to his Pois
+        if ($request->user()->isEditor()) return [
+            (new ThemeFilter)
+        ];
     }
 
     /**
@@ -224,6 +228,16 @@ class EcPoi extends Resource
      */
     public function actions(NovaRequest $request)
     {
+        //if user is editor can edit themes related to his Pois
+        if ($request->user()->isEditor()) {
+            return [
+                (new editThemes)
+                    ->confirmText('Update Taxonomy Themes')
+                    ->confirmButtonText('Yes, edit the themes')
+                    ->cancelButtonText('No, cancel')
+            ];
+        }
+
         return [];
     }
 

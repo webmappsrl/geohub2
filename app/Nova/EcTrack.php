@@ -121,21 +121,15 @@ class EcTrack extends Resource
     public function filters(NovaRequest $request)
     {
 
+        //if user is admin can filter by user
         if ($request->user()->isAdmin()) return [
             (new NovaSearchableBelongsToFilter('User'))
                 ->fieldAttribute('user')
                 ->filterBy('user_id'),
-            //! To fix: search by taxonomy theme
-            (new NovaSearchableBelongsToFilter('Taxonomy Theme'))
-                ->fieldAttribute('taxonomy_themes')
-                ->filterBy('taxonomy_themes.identifier')
         ];
-        return [
-            // search by taxonomy theme
-            (new NovaSearchableBelongsToFilter('Taxonomy Theme'))
-                ->fieldAttribute('taxonomy_themes')
-                ->filterBy('taxonomy_themes.identifier')
-
+        //if user is editor can filter by themes related to his tracks
+        if ($request->user()->isEditor()) return [
+            (new ThemeFilter)
         ];
     }
 
@@ -158,11 +152,16 @@ class EcTrack extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [
-            (new editThemes)
-                ->confirmText('Update Taxonomy Theme')
-                ->confirmButtonText('Yes, edit the themes')
-                ->cancelButtonText('No, cancel')
-        ];
+        // if user is editor can edit themes
+        if ($request->user()->isEditor()) {
+            return [
+                (new editThemes)
+                    ->confirmText('Update Taxonomy Themes')
+                    ->confirmButtonText('Yes, edit the themes')
+                    ->cancelButtonText('No, cancel')
+            ];
+        }
+
+        return [];
     }
 }

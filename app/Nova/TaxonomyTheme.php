@@ -94,11 +94,6 @@ class TaxonomyTheme extends Resource
      */
     public function actions(NovaRequest $request)
     {
-        return [
-            (new editThemes)
-                ->confirmText('Update Taxonomy Theme')
-                ->confirmButtonText('Yes, edit the themes')
-                ->cancelButtonText('No, cancel')
-        ];
+        return [];
     }
 }
