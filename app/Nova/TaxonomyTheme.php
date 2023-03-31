@@ -3,11 +3,11 @@
 namespace App\Nova;
 
 use Laravel\Nova\Fields\ID;
-use Illuminate\Http\Request;
-use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
-use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Text;
+use App\Nova\Actions\editThemes;
+use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 
 class TaxonomyTheme extends Resource
 {

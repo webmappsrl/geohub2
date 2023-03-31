@@ -2,8 +2,6 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Panel;
-use Davidpiesse\Map\Map;
 use Eminiarts\Tabs\Tabs;
 use Wm\MapPoint\MapPoint;
 use Laravel\Nova\Fields\ID;
@@ -12,20 +10,21 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
+use App\Nova\Actions\editThemes;
+use App\Nova\Filters\ThemeFilter;
 use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Markdown;
 use Laravel\Nova\Fields\Textarea;
 use Davidpiesse\NovaToggle\Toggle;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\MorphToMany;
-use Chaseconey\ExternalImage\ExternalImage;
+use Datomatic\NovaMarkdownTui\MarkdownTui;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
 
-
 class EcPoi extends Resource
 {
-
 
     /**
      * The model the resource corresponds to.
@@ -59,10 +58,14 @@ class EcPoi extends Resource
      */
     public static function indexQuery(NovaRequest $request, $query)
     {
+        //if user is admin can see all
         if ($request->user()->isAdmin()) {
             return $query;
         }
-        return $query->where('user_id', $request->user()->id);
+        //if user is editor can only see his own pois
+        if ($request->user()->isEditor()) {
+            return $query->where('user_id', $request->user()->id);
+        }
     }
 
     /**
@@ -76,11 +79,15 @@ class EcPoi extends Resource
 
         return [
             ID::make()->sortable(),
+
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
-                Text::make(__('description'), 'description')->hideFromIndex(),
-                Text::make(__('excerpt'), 'excerpt')->hideFromIndex(),
-            ])->setTitle('Name'),
+                Textarea::make(__('excerpt'), 'excerpt')
+                    ->hideFromIndex()
+                    ->alwaysShow(),
+                MarkdownTui::make(__('description'), 'description')->hideFromIndex(),
+            ])->setTitle(__('Name')),
+
             BelongsTo::make('User'),
             DateTime::make(__('Created At'), 'created_at')->sortable(),
             DateTime::make(__('Updated At'), 'updated_at')->sortable(),
@@ -126,9 +133,7 @@ class EcPoi extends Resource
                         NovaTabTranslatable::make([
                             Text::make(__('Name'), 'name'),
                             Textarea::make(__('Excerpt'), 'excerpt'),
-                            //! not working
-                            //!NovaTinyMCE::make(__('Description'), 'description'),
-                            Textarea::make(__('Description'), 'description'),
+                            MarkdownTui::make(__('Description'), 'description'),
                         ]),
                         BelongsTo::make('User'),
                         MapPoint::make(__('Map'), 'geometry')->withMeta([
@@ -188,15 +193,20 @@ class EcPoi extends Resource
      * @param  \Laravel\Nova\Http\Requests\NovaRequest  $request
      * @return array
      */
+
     public function filters(NovaRequest $request)
     {
+
+        //if user is admin can filter by user
         if ($request->user()->isAdmin()) return [
             (new NovaSearchableBelongsToFilter('User'))
                 ->fieldAttribute('user')
                 ->filterBy('user_id'),
         ];
-
-        return [];
+        //if user is editor can filter by themes related to his Pois
+        if ($request->user()->isEditor()) return [
+            (new ThemeFilter)
+        ];
     }
 
     /**
@@ -218,6 +228,16 @@ class EcPoi extends Resource
      */
     public function actions(NovaRequest $request)
     {
+        //if user is editor can edit themes related to his Pois
+        if ($request->user()->isEditor()) {
+            return [
+                (new editThemes)
+                    ->confirmText('Update Taxonomy Themes')
+                    ->confirmButtonText('Yes, edit the themes')
+                    ->cancelButtonText('No, cancel')
+            ];
+        }
+
         return [];
     }
 
@@ -236,8 +256,7 @@ class EcPoi extends Resource
             NovaTabTranslatable::make([
                 Text::make(__('Name'), 'name'),
                 Textarea::make(__('Excerpt'), 'excerpt'),
-                //! NovaTinyMCE not working, used Textarea
-                Textarea::make(__('Description'), 'description'),
+                MarkdownTui::make(__('Description'), 'description'),
             ])->onlyOnDetail(),
         ];
     }
