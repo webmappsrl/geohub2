@@ -21,8 +21,12 @@ php artisan geohub:import --customer_email=portable@webmapp.it
 # Clear the old cache
 php artisan clear-compiled
 
+# php artisan vendor:publish --tag=wm-package-config
+
 composer dump-autoload
 php artisan optimize
+
+# php artisan config:clear
 
 # Compile npm assets
 # npm run prod

@@ -15,3 +15,5 @@ yarn-error.log
 /docker/volumes/*
 /.vscode/*.json
 docker-compose.yml
+/storage/backups
+/storage/app/database
