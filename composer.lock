@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef5f4e89e263ee89f06e476771e77a9a",
+    "content-hash": "5d036951a07f18ef54eaa69b2f805ad0",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -7356,7 +7356,7 @@
         },
         {
             "name": "wm/wm-internal",
-            "version": "dev-main",
+            "version": "dev-feature/git_actions",
             "dist": {
                 "type": "path",
                 "url": "./wm-internal",
@@ -7437,16 +7437,16 @@
         },
         {
             "name": "wm/wm-package",
-            "version": "1.0",
+            "version": "1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmappsrl/wm-package.git",
-                "reference": "b70486e562dcf9081fecb00cc566709725921832"
+                "reference": "fa0136409ed609960659c4916e0e7cc17b0dd629"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmappsrl/wm-package/zipball/b70486e562dcf9081fecb00cc566709725921832",
-                "reference": "b70486e562dcf9081fecb00cc566709725921832",
+                "url": "https://api.github.com/repos/webmappsrl/wm-package/zipball/fa0136409ed609960659c4916e0e7cc17b0dd629",
+                "reference": "fa0136409ed609960659c4916e0e7cc17b0dd629",
                 "shasum": ""
             },
             "require": {
@@ -7508,9 +7508,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmappsrl/wm-package/issues",
-                "source": "https://github.com/webmappsrl/wm-package/tree/1.0"
+                "source": "https://github.com/webmappsrl/wm-package/tree/1.1"
             },
-            "time": "2023-02-22T08:30:30+00:00"
+            "time": "2023-04-03T20:57:54+00:00"
         }
     ],
     "packages-dev": [

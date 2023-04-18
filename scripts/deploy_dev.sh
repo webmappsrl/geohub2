@@ -18,19 +18,14 @@ composer install  --no-interaction --prefer-dist --optimize-autoloader
 php artisan migrate:fresh
 php artisan geohub:import --customer_email=portable@webmapp.it
 
+
 # Clear the old cache
 php artisan clear-compiled
 
-# php artisan vendor:publish --tag=wm-package-config
-
 composer dump-autoload
+php artisan config:clear
 php artisan optimize
 
-# php artisan config:clear
-
-# Compile npm assets
-# npm run prod
-# cd vendor/laravel/nova && npm install
 # Exit maintenance mode
 php artisan up
 

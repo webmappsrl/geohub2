@@ -30,6 +30,8 @@ jobs:
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
       run: php artisan key:generate
+    - name: Add hosts to /etc/hosts
+      run: sudo echo "127.0.0.1 db" | sudo tee -a /etc/hosts
     - name: Migrate
       run: php artisan migrate
       env:
@@ -39,8 +41,8 @@ jobs:
     - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSHKEY }}
+        host: ${{ secrets.HOSTDEV }}
+        username: ${{ secrets.USERNAMEDEV }}
+        port: ${{ secrets.PORTDEV }}
+        key: ${{ secrets.SSHKEYDEV }}
         script: "cd /root/html/geohub && git pull && docker exec php81_geohub bash scripts/deploy_dev.sh"
