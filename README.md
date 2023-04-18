@@ -12,7 +12,7 @@ First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and
 Replace `${instance name}` with the instance name (APP_NAME in .env file)
 
 ```sh
-git clone git@github.com:webmappsrl/${instance name}.git geohub
+git clone git@github.com:webmappsrl/geohub2.git geohub
 git flow init
 ```
 
