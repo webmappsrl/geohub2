@@ -13,5 +13,7 @@ npm-debug.log
 yarn-error.log
 /.idea
 /docker/volumes/*
-/.vscode
+/.vscode/*.json
 docker-compose.yml
+/storage/backups
+/storage/app/database

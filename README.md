@@ -1,6 +1,6 @@
 # Geohub 2
 
-Webmapp's Starting point
+Webmapp's Starting point.....
 
 ## Geohub2 based on Nova 4
 
@@ -8,133 +8,49 @@ Geohub2 in Laravel 10 basato su php 8.1 e posgres + postgis. Supporto locale per
 
 ## INSTALL
 
-First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command.
+First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the [ALIASES command](https://github.com/webmappsrl/geobox#aliases-and-global-shell-variable).
+Replace `${instance name}` with the instance name (APP_NAME in .env file)
 
 ```sh
-git clone git@github.com:webmappsrl/geohub2.git
-cd geohub2
+git clone git@github.com:webmappsrl/${instance name}.git geohub
+git flow init
+```
+
+*Important NOTE*: remember to checkout the develop branch.
+
+```sh
+cd ${instance name}
 bash docker/init-docker.sh
-geobox_install geohub2
+docker exec -u 0 -it php81_${instance name} bash
+chown -R 33 storage
 ```
 
-Important NOTE: remember to checkout the develop branch.
-
-## Run geohub2 server from shell outside docker
-
-In order to start a geohub2 server in local environment use the following command:
-
-```sh
-geobox_serve geohub2
-```
-
-### Differenze ambiente produzione locale
-
-Questo sistema di container docker è utilizzabile sia per lo sviluppo locale sia per un sistema in produzione. In locale abbiamo queste caratteristiche:
-
--   la possibilità di lanciare il processo processo `php artisan serve` all'interno del container phpfpm, quindi la configurazione della porta `DOCKER_SERVE_PORT` (default: `8000`) necessaria al progetto. Se servono più istanze laravel con processo artisan serve contemporaneamente in locale, valutare di dedicare una porta tcp dedicata ad ognuno di essi. Per fare questo basta solo aggiornare `DOCKER_SERVE_PORT`.
--   la presenza di xdebug, definito in fase di build dell'immagine durante l'esecuzione del comando
--   `APP_ENV=local`, `APP_DEBUG=true` e `LOG_LEVEL=debug` che istruiscono laravel su una serie di comportamenti per il debug e l'esecuzione locale dell'applicativo
--   Una password del db con complessità minore. **In produzione usare [password complesse](https://www.avast.com/random-password-generator#pc)**
-
-### Inizializzazione
-
--   Copy file `.env-example` to `.env`
-
-    Questi valori nel file .env sono necessari per avviare l'ambiente docker. Hanno un valore di default e delle convenzioni associate, valutare la modifica:
-
-    -   `DOCKER_PHP_PORT` (Incrementing starting from 9100 to 9199 range for MAC check with command "lsof -iTCP -sTCP:LISTEN")
-    -   `DOCKER_SERVE_PORT` (always 8000, only on local environment)
-    -   `DOCKER_PROJECT_DIR_NAME` (it's the folder name of the project)
-    -   `DB_DATABASE`
-    -   `DB_USERNAME`
-    -   `DB_PASSWORD`
-
-    Se siamo in produzione, rimuovere (o commentare) la riga:
-
-    ```yml
-    - ${DOCKER_SERVE_PORT}:8000
-    ```
-
-    dal file `docker-compose.yml`
-
--   Creare l'ambiente docker
-    ```sh
-    bash docker/init-docker.sh
-    ```
--   Digitare `y` durante l'esecuzione dello script per l'installazione di xdebug
-
--   Verificare che i container si siano avviati
-
-    ```sh
-    docker ps
-    ```
-
--   Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve:
-
-    ```sh
-    docker exec -it php81_geohub2 bash
-    composer install
-    php artisan key:generate
-    php artisan optimize
-    php artisan migrate
-    php artisan serve --host 0.0.0.0
-    ```
-
--   A questo punto l'applicativo è in ascolto su <http://127.0.0.1:8000> (la porta è quella definita in `DOCKER_SERVE_PORT`)
-
-### Configurazione xdebug vscode (solo in locale)
-
-Assicurarsi di aver installato l'estensione [PHP Debug](https://marketplace.visualstudio.com/items?itemName=xdebug.php-debug).
-
-Una volta avviato il container con xdebug configurare il file `.vscode/launch.json`, in particolare il `pathMappings` tenendo presente che **sulla sinistra abbiamo la path dove risiede il progetto all'interno del container**, `${workspaceRoot}` invece rappresenta la pah sul sistema host. Eg:
-
-```json
-{
-    "version": "0.2.0",
-    "configurations": [
-        {
-            "name": "Listen for Xdebug",
-            "type": "php",
-            "request": "launch",
-            "port": 9200,
-            "pathMappings": {
-                "/var/www/html/geohub2": "${workspaceRoot}"
-            }
-        }
-    ]
-}
-```
-
-Aggiornare `/var/www/html/geohub2` con la path della cartella del progetto nel container phpfpm.
-
-Per utilizzare xdebug **su browser** utilizzare uno di questi 2 metodi:
-
--   Installare estensione xdebug per browser [Xdebug helper](https://chrome.google.com/webstore/detail/xdebug-helper/eadndfjplgieldjbigjakmdgkmoaaaoc)
--   Utilizzare il query param `XDEBUG_SESSION_START=1` nella url che si vuole debuggare
--   Altro, [vedi documentazione xdebug](https://xdebug.org/docs/step_debug#web-application)
-
-Invece **su cli** digitare questo prima di invocare il comando php da debuggare:
+*Important NOTE*: if you have installed XDEBUG you need to create the xdebug.log file on the docker:
 
 ```bash
-export XDEBUG_SESSION=1
+docker exec -u 0 -it php81_${instance name} bash
+touch /var/log/xdebug.log
+chown -R 33 /var/log/
 ```
 
-### Scripts
+At the end run install command to for this instance
+```bash
+geobox_install ${instance name}
+```
 
-Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `geohub2`):
+*Important NOTE*: 
+- Update your local repository of Geobox following its [Aliases instructions](https://github.com/webmappsrl/geobox#aliases-and-global-shell-variable). Make sure that you have set the environment variable GEOBOX_PATH correctly.
+- Make sure that the version of wm-package of your instance is at leaset 1.1. Use command:
+```bash
+composer update wm/wp-package
+```
+
+Finally to import a fresh copy of database use Geobox restore command:
 
 ```bash
-docker exec -it php81_geohub2 bash scripts/deploy_dev.sh
+geobox_dump_restore ${instance name}
 ```
 
-### Artisan commands
-
--   `db:dump_db`
-    Create a new sql file exporting all the current database in the local disk under the `database` directory
--   `db:download`
-    download a dump.sql from server
--   `db:restore`
-    Restore a last-dump.sql file (must be in root dir)
 
 ### Problemi noti
 
@@ -145,10 +61,11 @@ Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura s
     ```bash
       chown -R 33 storage
     ```
+    NOTA: per eseguire il comando chown potrebbe essere necessario avere i privilegi di root. In questo caso si deve effettuare l'accesso al cointainer del docker utilizzando lo specifico utente root (-u 0). Questo è valido anche sbloccare la possibilità di scrivere nella cartella /var/log per il funzionamento di Xdedug
 
--   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `geohub2`):
+-   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
     `bash
-docker exec -u 0 -it php81_geohub2 bash scripts/deploy_dev.sh
+docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
 `
 
 Xdebug potrebbe non trovare il file di log configurato nel .ini, quindi generare vari warnings

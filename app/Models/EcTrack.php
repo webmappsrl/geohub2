@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-
 use App\Models\User;
+use App\Enums\UserRole;
+use App\Models\TaxonomyTheme;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Spatie\Translatable\HasTranslations;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class EcTrack extends Model
 {
     use HasFactory, HasTranslations;
 
-    public $translatable = ['name', 'description'];
+    public $translatable = ['name', 'description', 'excerpt'];
 
     protected static function booted()
     {
@@ -27,13 +28,22 @@ class EcTrack extends Model
     protected $fillable = [
         'name',
         'user_id',
-        'description'
+        'description',
+        'excerpt',
+        'geohub_id',
+        'geometry'
+
     ];
 
     // Relationship with user
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->where('role', UserRole::Editor);
+    }
+
+    public function taxonomyThemes()
+    {
+        return $this->morphToMany(TaxonomyTheme::class, 'themeable', 'taxonomy_themeables');
     }
 }

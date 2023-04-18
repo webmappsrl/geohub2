@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\TaxonomyTheme;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
@@ -12,7 +13,7 @@ class EcPoi extends Model
 {
     use HasFactory, HasTranslations;
 
-    public $translatable = ['name', 'description'];
+    public $translatable = ['name', 'description', 'excerpt'];
 
     protected static function booted()
     {
@@ -26,10 +27,20 @@ class EcPoi extends Model
     protected $fillable = [
         'name',
         'user_id',
+        'description',
+        'excerpt',
+        'geohub_id',
+        'geometry',
+        'out_source_feature_id'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function taxonomyThemes()
+    {
+        return $this->morphToMany(TaxonomyTheme::class, 'themeable', 'taxonomy_themeables');
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use App\Nova\User;
 use App\Nova\EcPoi;
 use App\Nova\EcTrack;
+use App\Nova\TaxonomyTheme;
 use Laravel\Nova\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Menu\MenuItem;
@@ -104,6 +105,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 MenuSection::make('Content', [
                     MenuItem::resource(EcTrack::class),
                     MenuItem::resource(EcPoi::class),
+                    MenuItem::resource(TaxonomyTheme::class)
                 ])->icon('document-text')->collapsable(),
                 MenuSection::make('Admin', [
                     MenuItem::resource(User::class),

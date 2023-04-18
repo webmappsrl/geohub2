@@ -4,20 +4,17 @@ on:
   push:
     branches: 
       - develop
-  pull_request:
-    branches: 
-      - develop
 
 jobs:
   laravel-tests:
-
     runs-on: ubuntu-latest
     services:
       postgres:
-        image: postgis/postgis:10-2.5
+        image: postgis/postgis:14-3.3
         env:
-          POSTGRES_PASSWORD: geohub
-          POSTGRES_DB: geohub
+          POSTGRES_PASSWORD: geohub2
+          POSTGRES_DB: geohub2
+          POSTGRES_USER: geohub2
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -28,22 +25,24 @@ jobs:
         php-version: '8.1'
     - uses: actions/checkout@v3
     - name: Copy .env
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      run: cp .env-example .env
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
     - name: Generate key
       run: php artisan key:generate
+    - name: Add hosts to /etc/hosts
+      run: sudo echo "127.0.0.1 db" | sudo tee -a /etc/hosts
     - name: Migrate
       run: php artisan migrate
       env:
-          PGPASSWORD: geohub
+          PGPASSWORD: geohub2
     - name: Laravel Tests
       run: php artisan test
     - name: Deploy to server
       uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        port: ${{ secrets.PORT }}
-        key: ${{ secrets.SSHKEY }}
-        script: "cd /var/www/html/geohub && bash ./scripts/deploy_dev.sh"
+        host: ${{ secrets.HOSTDEV }}
+        username: ${{ secrets.USERNAMEDEV }}
+        port: ${{ secrets.PORTDEV }}
+        key: ${{ secrets.SSHKEYDEV }}
+        script: "cd /root/html/geohub && git pull && docker exec php81_geohub bash scripts/deploy_dev.sh"

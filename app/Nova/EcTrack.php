@@ -5,12 +5,19 @@ namespace App\Nova;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use App\Nova\Actions\editThemes;
+use App\Nova\Filters\ThemeFilter;
+use Laravel\Nova\Fields\DateTime;
+use Laravel\Nova\Fields\Markdown;
 use App\Nova\Metrics\TracksMetric;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\MorphToMany;
+use Datomatic\NovaMarkdownTui\MarkdownTui;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Wm\MapMultiLinestring\MapMultiLinestring;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
+use Laravel\Nova\Fields\Textarea;
 
 class EcTrack extends Resource
 {
@@ -26,7 +33,7 @@ class EcTrack extends Resource
      *
      * @var string
      */
-    public static $title = 'id';
+    public static $title = 'name';
 
     /**
      * The columns that should be searched.
@@ -46,10 +53,14 @@ class EcTrack extends Resource
      */
     public static function indexQuery(NovaRequest $request, $query)
     {
+        //if user is admin can see all
         if ($request->user()->isAdmin()) {
             return $query;
         }
-        return $query->where('user_id', $request->user()->id);
+        //if user is editor can only see his own tracks
+        if ($request->user()->isEditor()) {
+            return $query->where('user_id', $request->user()->id);
+        }
     }
 
 
@@ -67,17 +78,26 @@ class EcTrack extends Resource
 
             NovaTabTranslatable::make([
                 Text::make(__('name'), 'name'),
-                Text::make(__('description'), 'description')->hideFromIndex(),
-            ]),
+                Textarea::make(__('excerpt'), 'excerpt')
+                    ->hideFromIndex()
+                    ->alwaysShow(),
+                MarkdownTui::make(__('description'), 'description')
+                    ->hideFromIndex(),
+            ])->setTitle(__('Name')),
+
 
             $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
-
+            DateTime::make(__('Created At'), 'created_at')->sortable(),
+            DateTime::make(__('Updated At'), 'updated_at')->sortable(),
+            Text::make('Geohub ID', 'geohub_id')->onlyOnDetail(),
             MapMultiLinestring::make('geometry')->withMeta([
                 'center' => ["43", "10"],
                 'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
                 'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
-                'defaultZoom' => 10
+                'defaultZoom' => 10,
+                'graphhopper_api' => 'https://graphhopper.webmapp.it/route'
             ])->hideFromIndex(),
+            MorphToMany::make('Taxonomy Themes', 'taxonomyThemes')->searchable(),
 
         ];
     }
@@ -101,13 +121,17 @@ class EcTrack extends Resource
      */
     public function filters(NovaRequest $request)
     {
+
+        //if user is admin can filter by user
         if ($request->user()->isAdmin()) return [
             (new NovaSearchableBelongsToFilter('User'))
                 ->fieldAttribute('user')
                 ->filterBy('user_id'),
         ];
-
-        return [];
+        //if user is editor can filter by themes related to his tracks
+        if ($request->user()->isEditor()) return [
+            (new ThemeFilter)
+        ];
     }
 
     /**
@@ -129,6 +153,16 @@ class EcTrack extends Resource
      */
     public function actions(NovaRequest $request)
     {
+        // if user is editor can edit themes
+        if ($request->user()->isEditor()) {
+            return [
+                (new editThemes)
+                    ->confirmText('Update Taxonomy Themes')
+                    ->confirmButtonText('Yes, edit the themes')
+                    ->cancelButtonText('No, cancel')
+            ];
+        }
+
         return [];
     }
 }
