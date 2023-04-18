@@ -13,9 +13,9 @@ jobs:
       postgres:
         image: postgis/postgis:14-3.3
         env:
-          POSTGRES_PASSWORD: geohub
-          POSTGRES_DB: geohub
-          POSTGRES_USER: geohub
+          POSTGRES_PASSWORD: geohub2
+          POSTGRES_DB: geohub2
+          POSTGRES_USER: geohub2
         ports:
           - 5432:5432
         # needed because the postgres container does not provide a healthcheck
@@ -36,7 +36,7 @@ jobs:
     - name: Migrate
       run: php artisan migrate
       env:
-          PGPASSWORD: geohub
+          PGPASSWORD: geohub2
     - name: Laravel Tests
       run: php artisan test
     - name: Deploy to server
