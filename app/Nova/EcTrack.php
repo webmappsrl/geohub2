@@ -13,14 +13,19 @@ use App\Nova\Metrics\TracksMetric;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\MorphToMany;
 use Datomatic\NovaMarkdownTui\MarkdownTui;
+use Eminiarts\Tabs\Tab;
+use Eminiarts\Tabs\Tabs;
+use Eminiarts\Tabs\Traits\HasTabs;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Wm\MapMultiLinestring\MapMultiLinestring;
 use Kongulov\NovaTabTranslatable\NovaTabTranslatable;
 use Khalin\Nova4SearchableBelongsToFilter\NovaSearchableBelongsToFilter;
+use Laravel\Nova\Fields\Color;
 use Laravel\Nova\Fields\Textarea;
 
 class EcTrack extends Resource
 {
+    use HasTabs;
     /**
      * The model the resource corresponds to.
      *
@@ -74,30 +79,37 @@ class EcTrack extends Resource
     public function fields(NovaRequest $request)
     {
         return [
-            ID::make()->sortable(),
+            Tabs::make('Track', [
+                Tab::make('Main Info', [
+                    ID::make()->sortable(),
 
-            NovaTabTranslatable::make([
-                Text::make(__('name'), 'name'),
-                Textarea::make(__('excerpt'), 'excerpt')
-                    ->hideFromIndex()
-                    ->alwaysShow(),
-                MarkdownTui::make(__('description'), 'description')
-                    ->hideFromIndex(),
-            ])->setTitle(__('Name')),
+                    NovaTabTranslatable::make([
+                        Text::make(__('name'), 'name'),
+                        Textarea::make(__('excerpt'), 'excerpt')
+                            ->hideFromIndex()
+                            ->alwaysShow(),
+                        MarkdownTui::make(__('description'), 'description')
+                            ->hideFromIndex(),
+                    ])->setTitle(__('Name')),
+                    $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
+                    DateTime::make(__('Created At'), 'created_at')->sortable(),
+                    DateTime::make(__('Updated At'), 'updated_at')->sortable(),
+                    Text::make('Geohub ID', 'geohub_id')->onlyOnDetail(),
+                    MapMultiLinestring::make('geometry')->withMeta([
+                        'center' => ["43", "10"],
+                        'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
+                        'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
+                        'defaultZoom' => 10,
+                        'graphhopper_api' => 'https://graphhopper.webmapp.it/route'
+                    ])->hideFromIndex(),
+                    MorphToMany::make('Taxonomy Themes', 'taxonomyThemes')->searchable(),
+                ]),
+                Tab::make('Style', [
+                    Color::make('Color', 'color')->hideFromIndex(),
+                ])
+            ])->withToolbar(),
 
 
-            $request->user()->isAdmin() ? BelongsTo::make('User') : BelongsTo::make('User')->onlyOnIndex(),
-            DateTime::make(__('Created At'), 'created_at')->sortable(),
-            DateTime::make(__('Updated At'), 'updated_at')->sortable(),
-            Text::make('Geohub ID', 'geohub_id')->onlyOnDetail(),
-            MapMultiLinestring::make('geometry')->withMeta([
-                'center' => ["43", "10"],
-                'attribution' => '<a href="https://webmapp.it/">Webmapp</a> contributors',
-                'tiles' => 'https://api.webmapp.it/tiles/{z}/{x}/{y}.png',
-                'defaultZoom' => 10,
-                'graphhopper_api' => 'https://graphhopper.webmapp.it/route'
-            ])->hideFromIndex(),
-            MorphToMany::make('Taxonomy Themes', 'taxonomyThemes')->searchable(),
 
         ];
     }

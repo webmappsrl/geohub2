@@ -106,24 +106,26 @@ class GeohubImport extends Command
     {
         $this->info("start importing " . count($data) . " tracks");
         foreach ($data as $key => $track) {
-            $trackProps = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . "$key"), true);
-            $geojson_content = json_encode($trackProps['geometry']);
+            $trackJson = json_decode(file_get_contents('https://geohub.webmapp.it/api/ec/track/' . "$key"), true);
+            $trackProperties = $trackJson['properties'];
+            $geojson_content = json_encode($trackJson['geometry']);
             EcTrack::updateOrCreate([
-                'geohub_id' => $trackProps['properties']['id']
+                'geohub_id' => $trackProperties['id']
             ], [
-                'name' => $trackProps['properties']['name'],
-                'description' => $trackProps['properties']['description'] ?? null,
+                'name' => $trackProperties['name'],
+                'description' => $trackProperties['description'] ?? null,
                 'geometry' => DB::select("SELECT ST_AsText(ST_Force2D(ST_LineMerge(ST_GeomFromGeoJSON('" . $geojson_content . "')))) As wkt")[0]->wkt,
-                'excerpt' => $trackProps['properties']['excerpt'] ?? null,
-                'user_id' => User::where('email', $trackProps['properties']['author_email'])->first()->id,
+                'excerpt' => $trackProperties['excerpt'] ?? null,
+                'user_id' => User::where('email', $trackProperties['author_email'])->first()->id,
+                'color' => $trackProperties['color'] ?? null
             ]);
             // update the taxonomyThemes relationship for the track
-            $themeIds = $trackProps['properties']['taxonomy']['theme'];
-            $track = EcTrack::where('geohub_id', $trackProps['properties']['id'])->first();
+            $themeIds = $trackProperties['taxonomy']['theme'];
+            $track = EcTrack::where('geohub_id', $trackProperties['id'])->first();
             foreach ($themeIds as $themeId) {
                 $theme = json_decode(file_get_contents("https://geohub.webmapp.it/api/taxonomy/theme/$themeId"), true);
                 $track->taxonomyThemes()->attach(TaxonomyTheme::where('identifier', $theme['identifier'])->first()->id);
-                $this->info("Track {$trackProps["properties"]["name"]["it"]} of {$trackProps["properties"]["author_email"]} imported correctly");
+                $this->info("Track {$trackProperties["name"]["it"]} of {$trackProperties["author_email"]} imported correctly");
             }
         }
     }
