@@ -51,6 +51,14 @@ Finally to import a fresh copy of database use Geobox restore command:
 geobox_dump_restore ${instance name}
 ```
 
+## Run web server from shell outside docker
+
+In order to start a web server in local environment use the following command:
+Replace `${instance name}` with the instance name (APP_NAME in .env file)
+
+```sh
+geobox_serve ${instance name}
+```
 
 ### Problemi noti
 
