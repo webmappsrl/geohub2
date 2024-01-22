@@ -4,7 +4,7 @@ Webmapp's Starting point
 
 ## Laravel 10 Project based on Nova 4
 
-Boilerplate per Laravel 10 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
+Boilerplate per Laravel 10 basato su php 8.2 e posgres + postgis. Supporto locale per web server php ed xdebug.
 
 ## INSTALL
 
