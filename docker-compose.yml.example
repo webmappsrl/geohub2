@@ -3,11 +3,10 @@ services:
   phpfpm:
     extra_hosts:
         - host.docker.internal:host-gateway
-    # user: root
     build: ./docker/configs/phpfpm
     restart: always
-    container_name: "php81_${APP_NAME}"
-    image: wm-phpfpm:8.2.15-fpm
+    container_name: "php83_${APP_NAME}"
+    image: wm-phpfpm:8.3-fpm
     ports:
       - ${DOCKER_PHP_PORT}:9000
       - ${DOCKER_SERVE_PORT}:8000
@@ -43,7 +42,7 @@ services:
     networks:
       - laravel
   horizon:
-    image: wm-phpfpm:8.2.15-fpm
+    image: wm-phpfpm:8.3-fpm
     container_name: "horizon_${APP_NAME}"
     working_dir: '/var/www/html/${DOCKER_PROJECT_DIR_NAME}'
     volumes:
@@ -73,7 +72,7 @@ services:
       - redis
     networks:
       - laravel
-  
+
 networks:
   laravel:
     driver: bridge

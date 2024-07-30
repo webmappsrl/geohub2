@@ -21,14 +21,14 @@ Important NOTE: remember to checkout the develop branch.
 ```sh
 cd ${instance name}
 bash docker/init-docker.sh
-docker exec -u 0 -it php81_${instance name} bash
+docker exec -u 0 -it php83_${instance name} bash
 chown -R 33 storage
 ```
 
 *Important NOTE*: if you have installed XDEBUG you need to create the xdebug.log file on the docker:
 
 ```bash
-docker exec -u 0 -it php81_${instance name} bash
+docker exec -u 0 -it php83_${instance name} bash
 touch /var/log/xdebug.log
 chown -R 33 /var/log/
 ```
@@ -118,7 +118,7 @@ Questo sistema di container docker è utilizzabile sia per lo sviluppo locale si
 -   Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve (utilizzare `APP_NAME` al posto di `$nomeApp`):
 
     ```sh
-    docker exec -it php81_$nomeApp bash
+    docker exec -it php83_$nomeApp bash
     composer install
     php artisan key:generate
     php artisan optimize
@@ -170,7 +170,7 @@ export XDEBUG_SESSION=1
 Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `$nomeApp`):
 
 ```bash
-docker exec -it php81_$nomeApp bash scripts/deploy_dev.sh
+docker exec -it php83_$nomeApp bash scripts/deploy_dev.sh
 ```
 
 ### Artisan commands
@@ -192,7 +192,7 @@ Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura s
 
     Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
     ```bash
-    docker exec -u 0 -it php81_$nomeApp bash
+    docker exec -u 0 -it php83_$nomeApp bash
     chown -R 33 storage
     ```
 
