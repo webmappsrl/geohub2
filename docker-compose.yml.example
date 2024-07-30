@@ -3,17 +3,21 @@ services:
   phpfpm:
     extra_hosts:
         - host.docker.internal:host-gateway
-    # user: root
     build: ./docker/configs/phpfpm
     restart: always
-    container_name: "php81_${APP_NAME}"
-    image: wm-phpfpm:8.2.15-fpm
+    container_name: "php83_${APP_NAME}"
+    image: wm-phpfpm:8.3-fpm
     ports:
       - ${DOCKER_PHP_PORT}:9000
       - ${DOCKER_SERVE_PORT}:8000
     volumes:
       - ".:/var/www/html/${DOCKER_PROJECT_DIR_NAME}"
     working_dir: '/var/www/html/${DOCKER_PROJECT_DIR_NAME}'
+    depends_on:
+      - db
+      - redis
+    networks:
+      - laravel
   db:
     image: postgis/postgis:14-3.3
     container_name: "postgres_${APP_NAME}"
@@ -27,3 +31,48 @@ services:
       - "./docker/volumes/postgresql/data:/var/lib/postgresql/data"
     ports: 
       - ${DOCKER_PSQL_PORT}:5432
+    networks:
+      - laravel
+  redis:
+    image: redis:latest
+    container_name: "redis_${APP_NAME}"
+    restart: always
+    ports: 
+      - 6379:6379
+    networks:
+      - laravel
+  horizon:
+    image: wm-phpfpm:8.3-fpm
+    container_name: "horizon_${APP_NAME}"
+    working_dir: '/var/www/html/${DOCKER_PROJECT_DIR_NAME}'
+    volumes:
+      - ".:/var/www/html/${DOCKER_PROJECT_DIR_NAME}"
+    entrypoint: ["php", "/var/www/html/${DOCKER_PROJECT_DIR_NAME}/artisan", "horizon"]
+    depends_on:
+      - phpfpm
+      - redis
+    networks:
+      - laravel
+  supervisor:
+    build:
+      context: ./docker
+      dockerfile: configs/supervisor/Dockerfile
+      args:
+        APP_ROOT: /var/www/html/${DOCKER_PROJECT_DIR_NAME}
+        COMMAND: "horizon"
+        OPTIONS: ""
+    container_name: "supervisor_${APP_NAME}"
+    volumes:
+      - ".:/var/www/html/${DOCKER_PROJECT_DIR_NAME}"
+      - "./docker/configs/supervisor/supervisord.conf:/etc/supervisor/conf.d/supervisord.conf"
+      - "./docker/configs/supervisor/logs:/var/log/supervisor"
+    entrypoint: ["/usr/bin/supervisord", "--nodaemon", "--configuration", "/etc/supervisor/conf.d/supervisord.conf"]
+    depends_on:
+      - phpfpm
+      - redis
+    networks:
+      - laravel
+
+networks:
+  laravel:
+    driver: bridge
