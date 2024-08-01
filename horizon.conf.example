@@ -1,0 +1,9 @@
+[program:laravel-horizon]
+process_name=%(program_name)s
+command=docker exec -t -u 33 --workdir=/var/www/html/{$APP_NAME} php81_{$APP_NAME} php artisan horizon
+autostart=true
+autorestart=true
+user=root
+redirect_stderr=true
+stdout_logfile=/var/www/html/{$APP_NAME}/storage/logs/horizon.log
+stopsignal=TERM
