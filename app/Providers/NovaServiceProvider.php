@@ -16,6 +16,21 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function boot()
     {
         parent::boot();
+
+        $this->getFooter();
+
+        Nova::mainMenu(function (Request $request) {
+            return [
+                MenuSection::dashboard(Main::class)->icon('chart-bar'),
+
+                MenuSection::make('Tools', [
+                    MenuItem::externalLink('Horizon', url('/horizon'))->openInNewTab(),
+                    MenuItem::externalLink('logs', url('logs'))->openInNewTab()
+                ])->icon('briefcase')->canSee(function (Request $request) {
+                    return $request->user()->email === 'team@webmapp.it';
+                })
+            ];
+        });
     }
 
     /**
@@ -26,9 +41,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     protected function routes()
     {
         Nova::routes()
-                ->withAuthenticationRoutes()
-                ->withPasswordResetRoutes()
-                ->register();
+            ->withAuthenticationRoutes()
+            ->withPasswordResetRoutes()
+            ->register();
     }
 
     /**
@@ -77,5 +92,12 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     public function register()
     {
         //
+    }
+
+    private function getFooter()
+    {
+        Nova::footer(function () {
+            return Blade::render('nova/footer');
+        });
     }
 }
