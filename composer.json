@@ -1,34 +1,30 @@
 {
+    "$schema": "https://getcomposer.org/schema.json",
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "The skeleton application for the Laravel framework.",
     "keywords": [
-        "framework",
-        "laravel"
+        "laravel",
+        "framework"
     ],
     "license": "MIT",
     "require": {
-        "php": "^8.0.2",
-        "guzzlehttp/guzzle": "^7.2",
-        "kongulov/nova-tab-translatable": "^2.1",
-        "laravel/framework": "^9.19",
-        "laravel/nova": "~4.0",
-        "laravel/sanctum": "^3.0",
-        "laravel/tinker": "^2.7",
-        "league/flysystem-aws-s3-v3": "^3.12",
-        "spatie/db-dumper": "^3.3",
-        "spatie/laravel-translatable": "^6.3",
-        "wm/wm-package": "*",
-        "wm/wm-internal": "*"
+        "php": "^8.2",
+        "laravel/framework": "^11.31",
+        "laravel/nova": "^5.0",
+        "laravel/tinker": "^2.9",
+        "predis/predis": "^2.3",
+        "wm/wm-package": "dev-feat/geometry-models-oc-4667"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
-        "laravel/pint": "^1.0",
-        "laravel/sail": "^1.0.1",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^6.1",
-        "phpunit/phpunit": "^9.5.10",
-        "spatie/laravel-ignition": "^1.0"
+        "fakerphp/faker": "^1.23",
+        "laravel/pail": "^1.1",
+        "laravel/pint": "^1.13",
+        "laravel/sail": "^1.26",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.1",
+        "pestphp/pest": "^3.7",
+        "pestphp/pest-plugin-laravel": "^3.1"
     },
     "autoload": {
         "psr-4": {
@@ -54,7 +50,13 @@
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "@php artisan key:generate --ansi"
+            "@php artisan key:generate --ansi",
+            "@php -r \"file_exists('database/database.sqlite') || touch('database/database.sqlite');\"",
+            "@php artisan migrate --graceful --ansi"
+        ],
+        "dev": [
+            "Composer\\Config::disableProcessTimeout",
+            "npx concurrently -c \"#93c5fd,#c4b5fd,#fb7185,#fdba74\" \"php artisan serve --host 0.0.0.0\" \"php artisan queue:listen --tries=1\" \"php artisan pail --timeout=0\" \"npm run dev\" --names=server,queue,logs,vite"
         ]
     },
     "extra": {
@@ -67,7 +69,8 @@
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
         }
     },
     "minimum-stability": "dev",
@@ -79,7 +82,7 @@
         },
         {
             "type": "path",
-            "url": "./wm-internal"
+            "url": "./wm-package"
         }
     ]
 }

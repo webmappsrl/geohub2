@@ -1,4 +1,4 @@
-FROM php:8.1-fpm
+FROM php:8.4.3-fpm
 
 USER root
 
@@ -14,47 +14,62 @@ RUN chown -R www-data:www-data /var/www \
     && chown  www-data:www-data /usr/local/etc/php-fpm.d/www.conf \
     && chown -R www-data:www-data /usr/local/etc/php-fpm.d/zz-docker.conf \
     && apt-get update && apt-get install -y \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
-        libmcrypt-dev \
-        libpng-dev \
-        zlib1g-dev \
-        libicu-dev \
-        g++ \
-        imagemagick \
-        libmagickwand-dev \
-        libmagickcore-dev \
-        git \
-	    unzip \
-        vim \
-        libzip-dev \
-	    libwebp-dev \
-        libpq-dev 
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libmcrypt-dev \
+    libpng-dev \
+    zlib1g-dev \
+    libicu-dev \
+    g++ \
+    imagemagick \
+    libmagickwand-dev \
+    libmagickcore-dev \
+    git \
+    unzip \
+    vim \
+    libzip-dev \
+    libwebp-dev \
+    libpq-dev \
+    osmium-tool \
+    osm2pgsql \
+    build-essential \
+    cmake \
+    libboost-dev \
+    libboost-program-options-dev \
+    libboost-filesystem-dev \
+    libboost-regex-dev \
+    libexpat1-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    liblz4-dev \
+    libprotobuf-dev \
+    protobuf-compiler \
+    libosmium2-dev \
+    libprotozero-dev \
+    supervisor \
+    gdal-bin \
+    zip \
+    nodejs npm \
+    postgresql-client \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-configure intl \
     && docker-php-ext-install -j$(nproc) \
-	gd \
-	intl \
-	zip \
-   	pdo \
+    gd \
+    intl \
+    zip \
+    pdo \
     pdo_mysql \
     opcache \
     pgsql \
     pdo_pgsql \
-    # && pecl install xdebug \
-    && pecl install imagick \
-    # && docker-php-ext-enable xdebug \
-    && pecl install apcu \
-    #&& pecl install mcrypt-1.0.2 \
-    #&& docker-php-ext-enable mcrypt \
-    && docker-php-ext-enable apcu \
-    && docker-php-ext-enable imagick \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    exif \
+    pcntl 
 
 RUN curl -sS https://getcomposer.org/installer | php \
     && mv composer.phar /usr/local/bin/composer \
     && ln -s /usr/local/bin/composer /usr/bin/composer
-
 
 ENV HOME /var/www
 WORKDIR /var/www

@@ -2,28 +2,62 @@
 
 Webmapp's Starting point
 
-## Laravel 9 Project based on Nova 4
+## Laravel 10 Project based on Nova 4
 
-Boilerplate per Laravel 9 basato su php 8.1 e posgres + postgis. Supporto locale per web server php ed xdebug.
+Boilerplate per Laravel 10 basato su php 8.2 e posgres + postgis. Supporto locale per web server php ed xdebug.
 
 ## INSTALL
 
-First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the ALIASES command. 
-Replace `${instance name}` with the instance name (APP_NAME in .env file) 
+First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the [ALIASES command](https://github.com/webmappsrl/geobox#aliases-and-global-shell-variable).
+Replace `${instance name}` with the instance name (APP_NAME in .env file)
 
 ```sh
-git clone git@github.com:webmappsrl/${instance name}.git
-cd ${instance name}
-bash docker/init-docker.sh
-geobox_install ${instance name}
+git clone git@github.com:webmappsrl/${repository_name}.git ${instance name}
+git flow init
 ```
 
 Important NOTE: remember to checkout the develop branch.
 
+```sh
+cd ${instance name}
+bash docker/init-docker.sh
+docker exec -u 0 -it php81_${instance name} bash
+chown -R 33 storage
+```
+
+_Important NOTE_: if you have installed XDEBUG you need to create the xdebug.log file on the docker:
+
+```bash
+docker exec -u 0 -it php81_${instance name} bash
+touch /var/log/xdebug.log
+chown -R 33 /var/log/
+```
+
+At the end run install command to for this instance
+
+```bash
+geobox_install ${instance name}
+```
+
+_Important NOTE_:
+
+-   Update your local repository of Geobox following its [Aliases instructions](https://github.com/webmappsrl/geobox#aliases-and-global-shell-variable). Make sure that you have set the environment variable GEOBOX_PATH correctly.
+-   Make sure that the version of wm-package of your instance is at leaset 1.1. Use command:
+
+```bash
+composer update wm/wp-package
+```
+
+Finally to import a fresh copy of database use Geobox restore command:
+
+```bash
+geobox_dump_restore ${instance name}
+```
+
 ## Run web server from shell outside docker
 
 In order to start a web server in local environment use the following command:
-Replace `${instance name}` with the instance name (APP_NAME in .env file) 
+Replace `${instance name}` with the instance name (APP_NAME in .env file)
 
 ```sh
 geobox_serve ${instance name}
@@ -153,19 +187,18 @@ docker exec -it php81_$nomeApp bash scripts/deploy_dev.sh
 
 ### Problemi noti
 
-Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura su certe cartelle, questo perchè di default l'utente dentro il container è `www-data (id:33)` quando invece nel sistema host l'utente ha id `1000`. Ci sono 2 possibili soluzioni:
+Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura su certe cartelle, questo perchè di default l'utente dentro il container è `www-data (id:33)` quando invece nel sistema host l'utente ha id `1000`:
 
 -   Chown/chmod della cartella dove si intende scrivere, eg:
 
-    ```bash
-      chown -R 33 storage
-    ```
     NOTA: per eseguire il comando chown potrebbe essere necessario avere i privilegi di root. In questo caso si deve effettuare l'accesso al cointainer del docker utilizzando lo specifico utente root (-u 0). Questo è valido anche sbloccare la possibilità di scrivere nella cartella /var/log per il funzionamento di Xdedug
 
--   Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
-    `bash
-docker exec -u 0 -it php81_$nomeApp bash scripts/deploy_dev.sh
-`
+    Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
+
+    ```bash
+    docker exec -u 0 -it php81_$nomeApp bash
+    chown -R 33 storage
+    ```
 
 Xdebug potrebbe non trovare il file di log configurato nel .ini, quindi generare vari warnings
 
