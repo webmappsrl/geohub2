@@ -114,4 +114,11 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
         //
     }
+
+    private function getFooter()
+    {
+        Nova::footer(function () {
+            return Blade::render('nova/footer');
+        });
+    }
 }

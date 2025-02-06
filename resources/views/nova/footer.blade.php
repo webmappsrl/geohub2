@@ -1,5 +1,9 @@
 <div class="text-center">
+<<<<<<< HEAD
     WEBMAPP {{ config('app.release') }} ({{ config('app.release_date') }}) ENV: {{ config('app.env') }}
+=======
+    OSM2CAI {{ config('app.release') }} ({{ config('app.release_date') }}) ENV: {{ config('app.env') }}
+>>>>>>> main
 
     <span class="px-1">&middot;</span>
     <a href="https://nova.laravel.com" class="text-primary dim no-underline">Laravel Nova</a>

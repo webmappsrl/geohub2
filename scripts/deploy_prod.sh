@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 echo "Production deployment started ..."
 
@@ -14,11 +13,12 @@ php artisan config:clear
 
 # Clear the old cache
 php artisan clear-compiled
+php artisan optimize
 
-# TODO: Uncomment when api.favorite issue will be resolved
-# php artisan optimize
+ php artisan migrate --force
 
-php artisan migrate
+# gracefully terminate laravel horizon.
+php artisan horizon:terminate
 
 php artisan up
 
