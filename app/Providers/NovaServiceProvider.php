@@ -9,6 +9,7 @@ use Laravel\Fortify\Features;
 use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Menu\MenuSection;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Request;
 use Laravel\Nova\NovaApplicationServiceProvider;
 
@@ -34,12 +35,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                     return $request->user()->email === 'team@webmapp.it';
                 })
             ];
-        });
-    }
-    private function getFooter()
-    {
-        Nova::footer(function () {
-            return Blade::render('nova/footer');
         });
     }
 

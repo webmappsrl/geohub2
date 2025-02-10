@@ -1,6 +1,26 @@
-include:
- - compose.yml
+
 services:
+  php:
+    extends: 
+      file: compose.yml
+      service: php
+    ports:
+      - ${DOCKER_SERVE_PORT}:8000
+      - ${DOCKER_VITE_PORT}:5173
+  db:
+    extends: 
+      file: compose.yml
+      service: db
+  redis:
+    extends: 
+      file: compose.yml
+      service: redis
+  elasticsearch:
+    extends: 
+      file: compose.yml
+      service: elasticsearch
+  
+    
   # needed for aws s3 storage testing
   minio:
     image: "minio/minio:latest"

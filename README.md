@@ -1,73 +1,66 @@
 # Laravel Postgis Boilerplate
 
-Webmapp's Starting point
+Punto di partenza di Webmapp
 
-## Laravel 10 Project based on Nova 4
+## Laravel 11 basato su Nova 5
 
-Boilerplate per Laravel 10 basato su php 8.2 e posgres + postgis. Supporto locale per web server php ed xdebug.
+Boilerplate per Laravel 11 basato su PHP 8.4 e Postgres + PostGIS. Supporto locale per web server PHP e Xdebug oltre a:
 
-## INSTALL
+-   redis
+-   elasticsearch
 
-First of all install the [GEOBOX](https://github.com/webmappsrl/geobox) repo and configure the [ALIASES command](https://github.com/webmappsrl/geobox#aliases-and-global-shell-variable).
-Replace `${instance name}` with the instance name (APP_NAME in .env file)
+per la versione di produzione e:
+
+-   mailpit
+-   minio
+
+per la versione di sviluppo
+
+## INSTALLAZIONE
+
+Prima di tutto, installa il repository [GEOBOX](https://github.com/webmappsrl/geobox) e configura il [comando ALIASES](https://github.com/webmappsrl/geobox#aliases-and-global-shell-variable).  
+Sostituisci `${instance name}` con il nome dell'istanza (APP_NAME nel file .env).
 
 ```sh
 git clone git@github.com:webmappsrl/${repository_name}.git ${instance name}
-git flow init
 ```
 
-Important NOTE: remember to checkout the develop branch.
+### Nota importante: ricordati di eseguire il checkout del branch develop.
 
 ```sh
 cd ${instance name}
 bash docker/init-docker.sh
-docker exec -u 0 -it php81_${instance name} bash
+docker exec -u 0 -it php_${instance name} bash
 chown -R 33 storage
 ```
 
-_Important NOTE_: if you have installed XDEBUG you need to create the xdebug.log file on the docker:
+### Se hai installato XDEBUG, crea il file xdebug.log nel container Docker
 
-```bash
-docker exec -u 0 -it php81_${instance name} bash
+```sh
+docker exec -u 0 -it php_${instance name} bash
 touch /var/log/xdebug.log
 chown -R 33 /var/log/
 ```
 
-At the end run install command to for this instance
-
-```bash
-geobox_install ${instance name}
-```
-
-_Important NOTE_:
-
--   Update your local repository of Geobox following its [Aliases instructions](https://github.com/webmappsrl/geobox#aliases-and-global-shell-variable). Make sure that you have set the environment variable GEOBOX_PATH correctly.
--   Make sure that the version of wm-package of your instance is at leaset 1.1. Use command:
-
-```bash
-composer update wm/wp-package
-```
-
-Finally to import a fresh copy of database use Geobox restore command:
-
-```bash
-geobox_dump_restore ${instance name}
-```
-
-## Run web server from shell outside docker
-
-In order to start a web server in local environment use the following command:
-Replace `${instance name}` with the instance name (APP_NAME in .env file)
-
-```sh
-geobox_serve ${instance name}
-```
-
 ### Differenze ambiente produzione locale
 
-Questo sistema di container docker è utilizzabile sia per lo sviluppo locale sia per un sistema in produzione. In locale abbiamo queste caratteristiche:
+Questo sistema di container docker è utilizzabile sia per lo sviluppo locale sia per un sistema in produzione.
 
--   la possibilità di lanciare il processo processo `php artisan serve` all'interno del container phpfpm, quindi la configurazione della porta `DOCKER_SERVE_PORT` (default: `8000`) necessaria al progetto. Se servono più istanze laravel con processo artisan serve contemporaneamente in locale, valutare di dedicare una porta tcp dedicata ad ognuno di essi. Per fare questo basta solo aggiornare `DOCKER_SERVE_PORT`.
+Di fatto il comando init-docker per utilizzare l'ambiente prod usa:
+
+```sh
+docker compose up -d
+```
+
+Per l'ambiente dev/locale invece:
+
+```sh
+docker compose -f develop.compose.yml up -d
+```
+
+In locale abbiamo queste caratteristiche:
+
+-   la possibilità di lanciare il processo processo `composer run dev` all'interno del container phpfpm, quindi la configurazione della porta `DOCKER_SERVE_PORT` (default: `8000`) e `DOCKER_VITE_PORT` (default:`5173`) necessaria al progetto. Se servono più istanze laravel con processo artisan serve contemporaneamente in locale, valutare di dedicare una porta tcp dedicata ad ognuno di essi. Per fare questo basta solo aggiornare `DOCKER_SERVE_PORT` e `DOCKER_VITE_PORT`.
 -   la presenza di xdebug, definito in fase di build dell'immagine durante l'esecuzione del comando
 -   `APP_ENV=local`, `APP_DEBUG=true` e `LOG_LEVEL=debug` che istruiscono laravel su una serie di comportamenti per il debug e l'esecuzione locale dell'applicativo
 -   Una password del db con complessità minore. **In produzione usare [password complesse](https://www.avast.com/random-password-generator#pc)**
@@ -91,26 +84,19 @@ Questo sistema di container docker è utilizzabile sia per lo sviluppo locale si
     Questi valori nel file .env sono necessari per avviare l'ambiente docker. Hanno un valore di default e delle convenzioni associate, valutare la modifica:
 
     -   `APP_NAME` (it's php container name and - postgrest container name, no space)
-    -   `DOCKER_PHP_PORT` (Incrementing starting from 9100 to 9199 range for MAC check with command "lsof -iTCP -sTCP:LISTEN")
-    -   `DOCKER_SERVE_PORT` (always 8000, only on local environment)
-    -   `DOCKER_PROJECT_DIR_NAME` (it's the folder name of the project)
+    -   `DOCKER_PHP_PORT` (Da 9100 a 9199. Per il sistema operativo MAC si può valutare le porte già occupate con `lsof -iTCP -sTCP:LISTEN`, su linux invece `nmap -atunp | grep LISTEN`)
+    -   `DOCKER_SERVE_PORT` (default 8000, solo in locale)
+    -   `DOCKER_VITE_PORT` ( default 5173, solo in locale, la porta dove è possibile recuperare gli asset compilati da vite)
+    -   `DOCKER_PROJECT_DIR_NAME` (è il nome della cartella del progetto)
     -   `DB_DATABASE`
     -   `DB_USERNAME`
     -   `DB_PASSWORD`
 
-    Se siamo in produzione, rimuovere (o commentare) la riga:
-
-    ```yml
-    - ${DOCKER_SERVE_PORT}:8000
-    ```
-
-    dal file `docker-compose.yml`
-
--   Creare l'ambiente docker
+-   Una volta compilato correttamente il file .env, tirare sù l'ambiente docker:
     ```sh
     bash docker/init-docker.sh
     ```
--   Digitare `y` durante l'esecuzione dello script per l'installazione di xdebug
+-   Rispondere alle domande poste dallo script con n o y
 
 -   Verificare che i container si siano avviati
 
@@ -121,7 +107,7 @@ Questo sistema di container docker è utilizzabile sia per lo sviluppo locale si
 -   Avvio di una bash all'interno del container php per installare tutte le dipendenze e lanciare il comando php artisan serve (utilizzare `APP_NAME` al posto di `$nomeApp`):
 
     ```sh
-    docker exec -it php81_$nomeApp bash
+    docker exec -it php_$nomeApp bash
     composer install
     php artisan key:generate
     php artisan optimize
@@ -168,23 +154,6 @@ Invece **su cli** digitare questo prima di invocare il comando php da debuggare:
 export XDEBUG_SESSION=1
 ```
 
-### Scripts
-
-Ci sono vari scripts per il deploy nella cartella `scripts`. Per lanciarli basta lanciare una bash con la path dello script dentro il container php, eg (utilizzare `APP_NAME` al posto di `$nomeApp`):
-
-```bash
-docker exec -it php81_$nomeApp bash scripts/deploy_dev.sh
-```
-
-### Artisan commands
-
--   `db:dump_db`
-    Create a new sql file exporting all the current database in the local disk under the `database` directory
--   `db:download`
-    download a dump.sql from server
--   `db:restore`
-    Restore a last-dump.sql file (must be in root dir)
-
 ### Problemi noti
 
 Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura su certe cartelle, questo perchè di default l'utente dentro il container è `www-data (id:33)` quando invece nel sistema host l'utente ha id `1000`:
@@ -196,7 +165,7 @@ Durante l'esecuzione degli script potrebbero verificarsi problemi di scrittura s
     Utilizzare il parametro `-u` per il comando `docker exec` così da specificare l'id utente, eg come utente root (utilizzare `APP_NAME` al posto di `$nomeApp`):
 
     ```bash
-    docker exec -u 0 -it php81_$nomeApp bash
+    docker exec -u 0 -it php_$nomeApp bash
     chown -R 33 storage
     ```
 

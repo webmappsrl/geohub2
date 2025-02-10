@@ -9,8 +9,6 @@ services:
     image: wm-phpfpm:8.4
     ports:
       - ${DOCKER_PHP_PORT}:9000
-      - ${DOCKER_SERVE_PORT}:8000
-      - ${DOCKER_VITE_PORT}:5173
     volumes:
       - ".:/var/www/html/${DOCKER_PROJECT_DIR_NAME}"
     working_dir: "/var/www/html/${DOCKER_PROJECT_DIR_NAME}"

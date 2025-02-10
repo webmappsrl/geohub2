@@ -1,7 +1,17 @@
 #!/bin/bash
 
 cp .env-example .env
-cp docker-compose.yml.example docker-compose.yml
+
+echo "Do you want to use the develop version of docker containers? y/n"
+read develop
+
+if [[ $develop = y ]]
+then
+    docker compose -f develop.compose.yml up -d
+else
+    docker compose up -d
+fi
+
 docker compose up -d
 
 echo "Do you want to install and activate xdebug? y/n"
