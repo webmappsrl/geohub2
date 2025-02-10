@@ -19,7 +19,7 @@ per la versione di sviluppo
 ## INSTALLAZIONE
 
 Prima di tutto, installa il repository [GEOBOX](https://github.com/webmappsrl/geobox) e configura il [comando ALIASES](https://github.com/webmappsrl/geobox#aliases-and-global-shell-variable).  
-Sostituisci `${instance name}` con il nome dell'istanza (APP_NAME nel file .env).
+Sostituisci `${instance name}` con il nome dell'istanza (APP_NAME nel file .env-example).
 
 ```sh
 git clone git@github.com:webmappsrl/${repository_name}.git ${instance name}
