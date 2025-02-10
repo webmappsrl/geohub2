@@ -12,8 +12,6 @@ else
     docker compose up -d
 fi
 
-docker compose up -d
-
 echo "Do you want to install and activate xdebug? y/n"
 read xdebug
 
