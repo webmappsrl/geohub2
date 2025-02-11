@@ -7,9 +7,9 @@ read develop
 
 if [[ $develop = y ]]
 then
-    docker compose -f develop.compose.yml up -d --build
+    docker compose -f develop.compose.yml up -d
 else
-    docker compose up -d --build
+    docker compose up -d
 fi
 
 echo "Do you want to install and activate xdebug? y/n"
