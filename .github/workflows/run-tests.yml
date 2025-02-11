@@ -1,0 +1,58 @@
+name: Run Tests
+
+on: [push, pull_request, workflow_call, workflow_dispatch]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: postgis/postgis:17-3.5-alpine
+        env:
+          POSTGRES_PASSWORD: ${DB_PASSWORD}
+          POSTGRES_DB: ${DB_DATABASE}
+          POSTGRES_USER: ${DB_USERNAME}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.4"
+      - name: Install GDAL dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gdal-bin
+      - name: Verify GDAL installation
+        run: |
+          ogr2ogr --version
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Copy .env
+        run: cp .env-deploy .env
+      - name: Configure composer before install
+        run: |
+          composer config "http-basic.nova.laravel.com" "${{ secrets.NOVA_USERNAME }}" "${{ secrets.NOVA_PASSWORD }}"
+      - name: Install composer dependencies
+        uses: ramsey/composer-install@v2
+      - name: Generate key
+        run: php artisan key:generate
+      - name: Migrate
+        run: php artisan migrate
+        env:
+          PGPASSWORD: ${DB_PASSWORD}
+      - name: Clear the config cache
+        run: php artisan config:clear
+      - name: Optimize
+        run: php artisan optimize
+      - name: Prepare Log File
+        run: mkdir -p storage/logs && touch storage/logs/test.log
+      - name: Laravel Tests
+        run: php artisan test --log-events-verbose-text storage/logs/test.log
+      - name: Upload Test Results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: storage/logs/test.log
