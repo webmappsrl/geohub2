@@ -20,6 +20,9 @@ jobs:
           php-version: "8.4"
           coverage: none
 
+      - name: Update git submodules
+        run: git submodule update --init --recursive
+
       - name: Configure composer before install
         run: |
           composer config "http-basic.nova.laravel.com" "${{ secrets.NOVA_USERNAME }}" "${{ secrets.NOVA_PASSWORD }}"
