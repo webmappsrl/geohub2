@@ -1,0 +1,24 @@
+name: Laravel deploy PROD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  tests:
+    uses: ./.github/workflows/run-tests.yml
+    secrets: inherit
+  deploy:
+    name: Deploy
+    needs: [tests]
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH connection and run scripts/deploy_prod.sh
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ vars.HOSTPROD }}
+          username: ${{ vars.USERNAMEPROD }}
+          port: ${{ vars.PORTPROD }}
+          key: ${{ secrets.SSHKEYPROD }}
+          script: "cd /var/www/html/${APP_NAME} && git pull && git submodule update --init --recursive && docker exec php_${APP_NAME} bash scripts/deploy_prod.sh"
