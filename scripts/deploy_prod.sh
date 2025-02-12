@@ -4,6 +4,8 @@ echo "Production deployment started ..."
 
 php artisan down
 
+git submodule update --init --recursive
+
 composer install
 composer dump-autoload
 
