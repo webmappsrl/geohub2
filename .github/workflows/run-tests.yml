@@ -54,5 +54,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
-          path: storage/logs/test.log
+          name: test-logs
+          path: storage/logs
