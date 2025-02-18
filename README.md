@@ -42,6 +42,23 @@ touch /var/log/xdebug.log
 chown -R 33 /var/log/
 ```
 
+### Installa le dipendenze
+
+Avvia una bash all'interno del container php per installare tutte le dipendenze (utilizzare `APP_NAME` al posto di `$nomeApp`):
+
+```sh
+docker exec -it php_$nomeApp bash
+composer install
+php artisan key:generate
+php artisan optimize
+php artisan migrate
+php artisan jwt:secret
+```
+
+#### Nota:
+
+-   Per completare l'installazione di Laravel Nova, é necessario fornire le credenziali di accesso.
+  
 ### Differenze ambiente produzione locale
 
 Questo sistema di container docker è utilizzabile sia per lo sviluppo locale sia per un sistema in produzione.
