@@ -50,8 +50,13 @@ RUN chown -R www-data:www-data /var/www \
     gdal-bin \
     zip \
     nodejs npm \
-    postgresql-client \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
+    postgresql-common
+
+RUN /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -v 17 \
+    && apt-get install -y postgresql-client-17 \
+    && update-alternatives --install /usr/bin/pg_dump pg_dump /usr/lib/postgresql/17/bin/pg_dump 100
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-configure intl \
