@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1](https://github.com/webmappsrl/laravel-postgis-boilerplate/compare/v1.0.0...v1.0.1) (2025-02-20)
+
+
+### Bug Fixes
+
+* pg_dump version ([e440add](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/e440add260da5c7e404e14894a62d9a78cb4cea9))
+* update wm-package version ([4c6d152](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/4c6d1524310f9ff05c7c5fa15820687a4db8e9ec))
+
 ## 1.0.0 (2025-02-12)
 
 
