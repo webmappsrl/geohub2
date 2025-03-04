@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/webmappsrl/laravel-postgis-boilerplate/compare/v1.0.1...v1.1.0) (2025-02-27)
+
+
+### Features
+
+* increase post_max_size in php.ini ([59332d6](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/59332d6912a835890c2681552f4a19b6b6388b63))
+
 ## [1.0.1](https://github.com/webmappsrl/laravel-postgis-boilerplate/compare/v1.0.0...v1.0.1) (2025-02-20)
 
 
