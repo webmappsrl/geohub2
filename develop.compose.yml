@@ -7,18 +7,22 @@ services:
     ports:
       - ${DOCKER_SERVE_PORT}:8000
       - ${DOCKER_VITE_PORT}:5173
+    platform: linux/amd64
   db:
     extends: 
       file: compose.yml
       service: db
+    platform: linux/amd64
   redis:
     extends: 
       file: compose.yml
       service: redis
+    platform: linux/amd64
   elasticsearch:
     extends: 
       file: compose.yml
       service: elasticsearch
+    platform: linux/amd64
   
     
   # needed for aws s3 storage testing
@@ -35,6 +39,7 @@ services:
     volumes:
       - "./docker/volumes/minio/data:/data/minio"
     command: 'minio server /data/minio --console-address ":8900"'
+    platform: linux/amd64
     healthcheck:
       test:
         - CMD
@@ -47,6 +52,7 @@ services:
   mailpit:
     container_name: "mailpit_${APP_NAME}"
     image: "axllent/mailpit:latest"
+    platform: linux/amd64
     ports:
     - "${FORWARD_MAILPIT_PORT:-1025}:1025"
     - "${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025"
