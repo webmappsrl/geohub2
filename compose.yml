@@ -38,6 +38,9 @@ services:
       - discovery.type=single-node
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      # https://stackoverflow.com/questions/73508356/cannot-setup-elasticsearch-kibana-from-docker-kibana-missing-authentication-cr
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
     ulimits:
       memlock:
         soft: -1
