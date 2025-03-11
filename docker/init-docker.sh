@@ -1,6 +1,12 @@
 #!/bin/bash
 
-cp .env-example .env
+echo "Do you want to copy the env-example into the .env file? y/n"
+read envcopy
+
+if [[ $envcopy = y ]]
+then
+    cp .env-example .env
+fi
 
 echo "Do you want to use the develop version of docker containers? y/n"
 read develop
