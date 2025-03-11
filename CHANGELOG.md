@@ -1,5 +1,22 @@
 # Changelog
 
+## [1.1.1](https://github.com/webmappsrl/laravel-postgis-boilerplate/compare/v1.1.0...v1.1.1) (2025-03-11)
+
+
+### Bug Fixes
+
+* docker compose elasticsearch oc:4975 ([6b2b549](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/6b2b549e4786fefb6f4b838f87be6c2f46fcef4d))
+* Update develop.compose.yml ([8fc9f31](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/8fc9f311340b00d374cecac912d1d2005ff5ffb4))
+* Update develop.compose.yml ([002d2a6](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/002d2a699cf6ec1e719d7ddb4ca972797f52fcdb))
+
+
+### Miscellaneous Chores
+
+* Update .env-example ([1c21546](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/1c215463a1e59aa67a50156baaa7f6502b8da6a3))
+* Update .env-example ([fec7c1c](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/fec7c1c2d193d797aa07a5daaf4339c381ff2fd8))
+* Update init-docker.sh ([0714a88](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/0714a88e2e2b2ebcee5880dbf99287f9d0aff414))
+* Update init-docker.sh ([d1edddb](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/d1edddb6c0218c35aaf5c3757f2a398970851934))
+
 ## [1.1.0](https://github.com/webmappsrl/laravel-postgis-boilerplate/compare/v1.0.1...v1.1.0) (2025-02-27)
 
 
