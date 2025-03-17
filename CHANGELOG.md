@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.2](https://github.com/webmappsrl/laravel-postgis-boilerplate/compare/v1.1.1...v1.1.2) (2025-03-17)
+
+
+### Miscellaneous Chores
+
+* Update .gitignore ([003b369](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/003b369248b0533821bd33a3d0c115e56c439042))
+* Update .gitignore ([38db055](https://github.com/webmappsrl/laravel-postgis-boilerplate/commit/38db0555894764d4259308cea2a943aa5c7bb04d))
+
 ## [1.1.1](https://github.com/webmappsrl/laravel-postgis-boilerplate/compare/v1.1.0...v1.1.1) (2025-03-11)
 
 
