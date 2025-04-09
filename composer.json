@@ -60,6 +60,7 @@
         ]
     },
     "extra": {
+        "enable-patching": true,
         "laravel": {
             "dont-discover": []
         }
