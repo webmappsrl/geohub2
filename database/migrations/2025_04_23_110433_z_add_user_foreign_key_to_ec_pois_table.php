@@ -13,9 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('taxonomy_poi_typeables', function (Blueprint $table) {
-            $table->integer('taxonomy_poi_type_id');
-            $table->morphs('taxonomy_poi_typeable');
+        Schema::table('ec_pois', function (Blueprint $table) {
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('SET NULL');
         });
     }
 
@@ -26,6 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('taxonomy_poi_typeables');
+        Schema::table('ec_pois', function (Blueprint $table) {
+            $table->dropForeign('ec_pois_user_id_foreign');
+            $table->dropColumn('user_id');
+        });
     }
 };

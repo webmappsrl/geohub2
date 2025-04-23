@@ -13,17 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('layers', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('app_id');
-            $table->jsonb('properties');
+        Schema::create('taxonomy_poi_types', function (Blueprint $table) {
+            $table->id('id');
+            
+            $table->text('name');
+            $table->text('description')->nullable();
+            $table->string('excerpt')->nullable();
+            
+            $table->text('identifier')->nullable()->unique();
             $table->timestamps();
-            $table->string('name');
+            $table->jsonb('properties')->nullable();
 
-            $table->geography('geometry')->nullable();
-
-            $table->spatialIndex('geometry');
-            $table->index('app_id');
         });
     }
 
@@ -34,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('layers');
+        Schema::dropIfExists('taxonomy_poi_types');
     }
 };

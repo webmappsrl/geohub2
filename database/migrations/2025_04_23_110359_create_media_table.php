@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid()->nullable()->unique();
             $table->string('collection_name');
             $table->string('name');
-            $table->geography('geometry', 'point', 4326);
+            $table->geography('geometry', 'pointz');
             $table->integer('app_id');
             $table->integer('user_id')->nullable();
             $table->string('file_name');
@@ -35,5 +35,10 @@ return new class extends Migration
             $table->index('app_id');
             $table->index('user_id');
         });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('media');
     }
 };

@@ -1,10 +1,12 @@
 <?php
 
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Wm\WmPackage\Models\Layer;
 
-return new class extends Migration
+class CreateLayerablesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +15,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('overlay_layers', function (Blueprint $table) {
-            $table->id('id');
-            $table->string('name');
-            $table->integer('app_id');
-            $table->jsonb('properties');
-            $table->jsonb('configuration')->nullable();
+        Schema::create('layerables', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(Layer::class);
+            $table->morphs('layerable');
             $table->timestamps();
 
-            $table->index('app_id');
+            $table->index('layer_id');
         });
     }
 
@@ -32,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('overlay_layers');
+        Schema::dropIfExists('layerables');
     }
-};
+}

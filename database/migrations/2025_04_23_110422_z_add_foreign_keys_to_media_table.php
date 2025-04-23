@@ -13,8 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('ugc_tracks', function (Blueprint $table) {
+        Schema::table('media', function (Blueprint $table) {
             $table->foreign(['app_id'])->references(['id'])->on('apps')->onDelete('CASCADE');
+            $table->foreign(['user_id'])->references(['id'])->on('users')->onDelete('CASCADE');
         });
     }
 
@@ -26,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('ugc_tracks', function (Blueprint $table) {
-            $table->dropForeign('ugc_tracks_app_id_foreign');
+            $table->dropForeign('media_app_id_foreign');
+            $table->dropForeign('ugc_tracks_user_id_foreign');
         });
     }
 };

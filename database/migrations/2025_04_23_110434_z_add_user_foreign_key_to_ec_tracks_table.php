@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('overlay_layer_layer', function (Blueprint $table) {
-            $table->integer('overlay_layer_id');
-            $table->bigInteger('layer_id');
-
-            $table->index('layer_id');
-            $table->index('overlay_layer_id');
+        Schema::table('ec_tracks', function (Blueprint $table) {
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('SET NULL');
         });
     }
 
@@ -29,6 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('overlay_layer_layer');
+        Schema::table('ec_tracks', function (Blueprint $table) {
+            $table->dropForeign('ec_tracks_user_id_foreign');
+            $table->dropColumn('user_id');
+        });
     }
 };

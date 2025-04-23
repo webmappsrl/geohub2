@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('taxonomy_themeables', function (Blueprint $table) {
-            $table->foreign(['taxonomy_theme_id'])->references(['id'])->on('taxonomy_themes');
+        Schema::table('layers', function (Blueprint $table) {
+            $table->foreignId('user_id')->nullable()->constrained('users')->onDelete('SET NULL');
         });
     }
 
@@ -25,8 +25,9 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('taxonomy_themeables', function (Blueprint $table) {
-            $table->dropForeign('taxonomy_themeables_taxonomy_theme_id_foreign');
+        Schema::table('layers', function (Blueprint $table) {
+            $table->dropForeign('layers_user_id_foreign');
+            $table->dropColumn('user_id');
         });
     }
 };

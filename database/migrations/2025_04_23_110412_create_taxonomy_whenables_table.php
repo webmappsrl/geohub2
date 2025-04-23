@@ -13,9 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('taxonomy_themeables', function (Blueprint $table) {
-            $table->integer('taxonomy_theme_id');
-            $table->morphs('taxonomy_themeable');
+        Schema::create('taxonomy_whenables', function (Blueprint $table) {
+            $table->id();
+            $table->integer('taxonomy_when_id');
+            $table->morphs('taxonomy_whenable');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('taxonomy_themeables');
+        Schema::dropIfExists('taxonomy_whenables');
     }
 };
