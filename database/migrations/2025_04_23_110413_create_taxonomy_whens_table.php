@@ -13,18 +13,17 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ec_tracks', function (Blueprint $table) {
+        Schema::create('taxonomy_whens', function (Blueprint $table) {
             $table->id('id');
-            $table->jsonb('properties');
+            
             $table->text('name');
-            $table->geography('geometry', 'multiLineString', 4326)->nullable();
-            $table->integer('app_id');
-            $table->bigInteger('osmid')->nullable();
+            $table->text('description')->nullable();
+            $table->string('excerpt')->nullable();
+            
+            $table->text('identifier')->nullable()->unique();
             $table->timestamps();
+            $table->jsonb('properties')->nullable();
 
-            $table->index('osmid');
-            $table->index('app_id');
-            $table->spatialIndex('geometry');
         });
     }
 
@@ -35,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ec_tracks');
+        Schema::dropIfExists('taxonomy_whens');
     }
 };

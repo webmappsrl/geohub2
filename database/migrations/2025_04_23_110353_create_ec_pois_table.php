@@ -13,12 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ec_track_layer', function (Blueprint $table) {
+        Schema::create('ec_pois', function (Blueprint $table) {
             $table->id('id');
-            $table->bigInteger('layer_id');
-            $table->bigInteger('ec_track_id');
+            $table->jsonb('properties');
+            $table->text('name');
+            $table->geography('geometry', 'pointz');
+            $table->integer('app_id');
+            $table->bigInteger('osmid')->nullable();
             $table->timestamps();
-            $table->index(['layer_id', 'ec_track_id']);
+
+            $table->index('osmid');
+            $table->index('app_id');
+            $table->spatialIndex('geometry');
         });
     }
 
@@ -29,6 +35,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ec_track_layer');
+        Schema::dropIfExists('ec_pois');
     }
 };

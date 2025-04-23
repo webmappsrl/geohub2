@@ -13,8 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('app_layer', function (Blueprint $table) {
-            $table->foreign(['layer_id'])->references(['id'])->on('layers')->onDelete('CASCADE');
+        Schema::create('taxonomy_targetables', function (Blueprint $table) {
+            $table->id();
+            $table->integer('taxonomy_target_id');
+            $table->morphs('taxonomy_targetable');
         });
     }
 
@@ -25,8 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('app_layer', function (Blueprint $table) {
-            $table->dropForeign('app_layer_layer_id_foreign');
-        });
+        Schema::dropIfExists('taxonomy_targetables');
     }
 };

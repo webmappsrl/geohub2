@@ -14,6 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::create('taxonomy_activityables', function (Blueprint $table) {
+            $table->id();
             $table->integer('taxonomy_activity_id');
             $table->morphs('taxonomy_activityable');
             $table->integer('duration_forward')->nullable()->default(0);

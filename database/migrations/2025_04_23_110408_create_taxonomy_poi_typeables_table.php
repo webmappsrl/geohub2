@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('ec_poi_ec_track', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->integer('ec_poi_id');
-            $table->integer('ec_track_id');
-            $table->integer('order')->default(0);
-            $table->index(['ec_poi_id', 'ec_track_id']);
+        Schema::create('taxonomy_poi_typeables', function (Blueprint $table) {
+            $table->id();
+            $table->integer('taxonomy_poi_type_id');
+            $table->morphs('taxonomy_poi_typeable');
         });
     }
 
@@ -29,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ec_poi_ec_track');
+        Schema::dropIfExists('taxonomy_poi_typeables');
     }
 };

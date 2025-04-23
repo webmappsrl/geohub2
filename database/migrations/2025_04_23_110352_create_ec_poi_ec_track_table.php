@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('taxonomy_targetables', function (Blueprint $table) {
-            $table->integer('taxonomy_target_id');
-            $table->morphs('taxonomy_targetable');
+        Schema::create('ec_poi_ec_track', function (Blueprint $table) {
+            $table->id();
+            $table->integer('ec_poi_id');
+            $table->integer('ec_track_id');
+            $table->integer('order')->default(0);
+            $table->index(['ec_poi_id', 'ec_track_id']);
         });
     }
 
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('taxonomy_targetables');
+        Schema::dropIfExists('ec_poi_ec_track');
     }
 };

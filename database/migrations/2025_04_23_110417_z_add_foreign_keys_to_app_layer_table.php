@@ -13,8 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('ugc_pois', function (Blueprint $table) {
-            $table->foreign(['app_id'])->references(['id'])->on('apps')->onDelete('CASCADE');
+        Schema::table('layer_associated_app', function (Blueprint $table) {
+            $table->foreign(['layer_id'])->references(['id'])->on('layers')->onDelete('CASCADE');
         });
     }
 
@@ -25,8 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('ugc_pois', function (Blueprint $table) {
-            $table->dropForeign('ugc_pois_app_id_foreign');
+        Schema::table('layer_associated_app', function (Blueprint $table) {
+            $table->dropForeign('layer_associated_app_layer_id_foreign');
         });
     }
 };
