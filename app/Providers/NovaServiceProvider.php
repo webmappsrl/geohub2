@@ -3,7 +3,12 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Nova\App;
 use App\Nova\Dashboards\Main;
+use App\Nova\Media;
+use App\Nova\TaxonomyActivity;
+use App\Nova\UgcPoi;
+use App\Nova\UgcTrack;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -12,6 +17,9 @@ use Laravel\Nova\Menu\MenuItem;
 use Laravel\Nova\Menu\MenuSection;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Wm\WmPackage\Nova\EcPoi;
+use Wm\WmPackage\Nova\EcTrack;
+use Wm\WmPackage\Nova\Layer;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -28,9 +36,29 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
             return [
                 MenuSection::dashboard(Main::class)->icon('chart-bar'),
 
+                MenuSection::make(' ', [
+                    MenuItem::resource(App::class),
+                    MenuItem::resource(Media::class),
+                ])->icon(''),
+
+                MenuSection::make('UGC', [
+                    MenuItem::resource(UgcPoi::class),
+                    MenuItem::resource(UgcTrack::class),
+                ])->icon('document'),
+
+                MenuSection::make('EC', [
+                    // MenuItem::resource(EcPoi::class),
+                    MenuItem::resource(EcTrack::class),
+                    MenuItem::resource(Layer::class),
+                ])->icon('document'),
+
+                MenuSection::make('Taxonomies', [
+                    MenuItem::resource(TaxonomyActivity::class),
+                ])->icon('document'),
+
                 MenuSection::make('Tools', [
                     MenuItem::externalLink('Horizon', url('/horizon'))->openInNewTab(),
-                    MenuItem::externalLink('logs', url('logs'))->openInNewTab(),
+                    MenuItem::externalLink('Telescope', url('/telescope'))->openInNewTab(),
                 ])->icon('briefcase')->canSee(function (Request $request) {
                     return $request->user()->email === 'team@webmapp.it';
                 }),
